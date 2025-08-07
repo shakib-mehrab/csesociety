@@ -53,6 +53,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.profilePicture = req.body.profilePicture || user.profilePicture;
+    user.phone = req.body.phone || user.phone;
+    user.batch = req.body.batch || user.batch;
+    user.department = req.body.department || user.department;
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -63,6 +66,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       role: updatedUser.role,
       profilePicture: updatedUser.profilePicture,
+      phone: updatedUser.phone,
+      batch: updatedUser.batch,
+      department: updatedUser.department,
     });
   } else {
     res.status(404);

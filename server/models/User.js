@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     studentId: { type: String, required: true, unique: true },
     department: { type: String, required: true, default: "CSE" },
+    batch: { type: String },
+    phone: { type: String },
     role: { type: String, enum: ["member", "admin", "super_admin", "coordinator","sub_coordinator"], default: "member" },
     profilePicture: { type: String }, // Cloudinary URL
     clubsJoined: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Club' }],
