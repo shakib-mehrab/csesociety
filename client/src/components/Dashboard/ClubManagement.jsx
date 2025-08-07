@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 
 
 import React, { useEffect, useState } from 'react';
@@ -11,6 +12,8 @@ const ClubManagement = () => {
   const [form, setForm] = useState({ name: '', description: '', coordinator: '', contactEmail: '', logo: null });
   const [users, setUsers] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [editClub, setEditClub] = useState(null); // club being edited
+  const [showView, setShowView] = useState(null); // club being viewed
 
 
   // Get auth token from localStorage
@@ -50,7 +53,7 @@ const ClubManagement = () => {
       // Find coordinator by studentId
       const coordinatorUser = users.find(u => u.studentId === form.coordinator);
       if (!coordinatorUser) throw new Error('Coordinator not found by student ID');
-      const clubRes = await api.post('/clubs', {
+      await api.post('/clubs', {
         name: form.name,
         description: form.description,
         coordinator: coordinatorUser._id,
@@ -66,6 +69,66 @@ const ClubManagement = () => {
       setLoading(false);
     }
   };
+
+  // Edit club logic
+  const handleEdit = club => {
+    setEditClub(club);
+    setForm({
+      name: club.name,
+      description: club.description,
+      coordinator: club.coordinator?.studentId || '',
+      contactEmail: club.contactEmail || '',
+      logo: null,
+    });
+    setShowCreate(false);
+  };
+
+  const handleUpdate = async e => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      let logoUrl = editClub.logo;
+      if (form.logo) {
+        const data = new FormData();
+        data.append('image', form.logo);
+        const uploadRes = await api.post('/upload', data, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        logoUrl = uploadRes.data.url;
+      }
+      const coordinatorUser = users.find(u => u.studentId === form.coordinator);
+      if (!coordinatorUser) throw new Error('Coordinator not found by student ID');
+      await api.put(`/clubs/${editClub._id}`, {
+        name: form.name,
+        description: form.description,
+        coordinator: coordinatorUser._id,
+        contactEmail: form.contactEmail,
+        logo: logoUrl,
+      });
+      setEditClub(null);
+      setForm({ name: '', description: '', coordinator: '', contactEmail: '', logo: null });
+      setRefresh(r => !r);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // View club logic: fetch full club details (with members) before showing modal
+  const handleView = async (club) => {
+    setLoading(true);
+    try {
+      const res = await api.get(`/clubs/${club._id}`);
+      setShowView(res.data);
+    } catch (err) {
+      setError('Failed to load club details');
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleCloseView = () => setShowView(null);
 
   const handleDelete = async id => {
     if (!window.confirm('Delete this club?')) return;
@@ -87,11 +150,13 @@ const ClubManagement = () => {
     <div>
       <h3 className="text-xl font-bold mb-4">Club Management</h3>
       {error && <div className="text-red-500 mb-2">{error}</div>}
-      <button className="mb-4 px-4 py-2 bg-blue-600 text-white rounded" onClick={() => setShowCreate(s => !s)}>
+      <button className="mb-4 px-4 py-2 bg-blue-600 text-white rounded" onClick={() => { setShowCreate(s => !s); setEditClub(null); }}>
         {showCreate ? 'Cancel' : 'Create New Club'}
       </button>
-      {showCreate && (
-        <form className="mb-4 p-4 bg-gray-50 rounded" onSubmit={handleCreate}>
+
+      {/* Create or Edit Club Form */}
+      {(showCreate || editClub) && (
+        <form className="mb-4 p-4 bg-gray-50 rounded" onSubmit={editClub ? handleUpdate : handleCreate}>
           <div className="mb-2">
             <input name="name" value={form.name} onChange={handleInput} placeholder="Club Name" className="border p-2 rounded w-full" required />
           </div>
@@ -113,15 +178,18 @@ const ClubManagement = () => {
           <div className="mb-2">
             <input type="file" accept="image/*" onChange={handleLogo} className="border p-2 rounded w-full" />
           </div>
-          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Create</button>
+          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded mr-2">{editClub ? 'Update' : 'Create'}</button>
+          {editClub && <button type="button" className="bg-gray-400 text-white px-4 py-2 rounded" onClick={() => { setEditClub(null); setForm({ name: '', description: '', coordinator: '', contactEmail: '', logo: null }); }}>Cancel</button>}
         </form>
       )}
+
       {loading ? (
         <div>Loading...</div>
       ) : (
         <table className="w-full border mt-4">
           <thead>
             <tr className="bg-gray-100">
+              <th className="p-2 border">Logo</th>
               <th className="p-2 border">Name</th>
               <th className="p-2 border">Description</th>
               <th className="p-2 border">Coordinator</th>
@@ -132,18 +200,41 @@ const ClubManagement = () => {
           <tbody>
             {clubs.map(club => (
               <tr key={club._id}>
+                <td className="p-2 border text-center">{club.logo && <img src={club.logo} alt="logo" className="h-10 w-10 object-cover rounded-full mx-auto" />}</td>
                 <td className="p-2 border">{club.name}</td>
                 <td className="p-2 border">{club.description}</td>
                 <td className="p-2 border">{club.coordinator?.name || club.coordinator || '-'}</td>
                 <td className="p-2 border">{club.contactEmail}</td>
                 <td className="p-2 border">
-                  <button className="bg-red-500 text-white px-2 py-1 rounded mr-2" onClick={() => handleDelete(club._id)}>Delete</button>
-                  {/* TODO: Add assign coordinator/sub-coordinators button */}
+                  <button className="bg-blue-500 text-white px-2 py-1 rounded mr-2" onClick={() => handleView(club)}>View</button>
+                  <button className="bg-yellow-500 text-white px-2 py-1 rounded mr-2" onClick={() => handleEdit(club)}>Edit</button>
+                  <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={() => handleDelete(club._id)}>Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      )}
+
+      {/* Club Details Modal */}
+      {showView && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative">
+            <button className="absolute top-2 right-2 text-gray-500 hover:text-black" onClick={handleCloseView}>&times;</button>
+            <h4 className="text-lg font-bold mb-2">{showView.name}</h4>
+            {showView.logo && <img src={showView.logo} alt="logo" className="h-20 w-20 object-cover rounded-full mb-2" />}
+            <div className="mb-2"><strong>Description:</strong> {showView.description}</div>
+            <div className="mb-2"><strong>Contact:</strong> {showView.contactEmail}</div>
+            <div className="mb-2"><strong>Coordinator:</strong> {showView.coordinator?.name} ({showView.coordinator?.email}, ID: {showView.coordinator?.studentId})</div>
+            <div className="mb-2"><strong>Members:</strong>
+              <ul className="list-disc ml-6">
+                {Array.isArray(showView.members) && showView.members.length > 0 ? showView.members.map((m, idx) => (
+                  <li key={m._id || idx}>{m.name} ({m.email}, ID: {m.studentId})</li>
+                )) : <li>No members</li>}
+              </ul>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

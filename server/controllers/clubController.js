@@ -45,7 +45,10 @@ const getAllJoinRequests = asyncHandler(async (req, res) => {
 // @route   GET /api/clubs
 // @access  Public
 const getAllClubs = asyncHandler(async (req, res) => {
-  const clubs = await Club.find({}).populate('coordinator', 'name email');
+  const clubs = await Club.find({})
+    .populate('coordinator', 'name email studentId')
+    .populate('subCoordinators', 'name email studentId')
+    .populate('members', 'name email studentId');
   res.json(clubs);
 });
 
@@ -54,10 +57,9 @@ const getAllClubs = asyncHandler(async (req, res) => {
 // @access  Public
 const getClubById = asyncHandler(async (req, res) => {
   const club = await Club.findById(req.params.id)
-    .populate('coordinator', 'name email')
-    .populate('subCoordinators', 'name email')
-    .populate('members', 'name email');
-    
+    .populate('coordinator', 'name email studentId')
+    .populate('subCoordinators', 'name email studentId')
+    .populate('members', 'name email studentId');
   if (club) {
     res.json(club);
   } else {
