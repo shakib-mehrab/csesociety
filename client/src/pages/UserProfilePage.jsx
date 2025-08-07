@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import api from '../services/api';
 
@@ -14,14 +15,27 @@ const UserProfilePage = () => {
     photo: user?.profilePicture || '',
   });
   const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
   const handleInput = e => setForm({ ...form, [e.target.name]: e.target.value });
   const handlePhoto = e => {
-    setPhotoFile(e.target.files[0]);
+    const file = e.target.files[0];
+    setPhotoFile(file);
+    if (file) {
+      setPhotoPreview(URL.createObjectURL(file));
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      if (photoPreview) {
+        URL.revokeObjectURL(photoPreview);
+      }
+    };
+  }, [photoPreview]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -109,7 +123,7 @@ const UserProfilePage = () => {
         <form onSubmit={handleSubmit} className="space-y-4 mt-6">
           <div className="relative flex flex-col items-center mb-4">
             <img
-              src={form.photo || '/default-avatar.png'}
+              src={photoPreview || form.photo || '/default-avatar.png'}
               alt="Profile"
               className="w-24 h-24 rounded-full object-cover border-4 border-blue-200 shadow"
             />
