@@ -3,6 +3,7 @@ import UserManagement from './UserManagement';
 import ClubManagement from './ClubManagement';
 import ContentManagement from './ContentManagement';
 import EventManagement from './EventManagement';
+import EventRegistrationReview from './EventRegistrationReview';
 import FinancialManagement from './FinancialManagement';
 import ReportingAnalytics from './ReportingAnalytics';
 import JoinRequests from './JoinRequests';
@@ -16,6 +17,7 @@ const featureComponents = {
   finance: <FinancialManagement />,
   report: <ReportingAnalytics />,
   joinRequests: <JoinRequests />,
+  eventRegistrations: <EventRegistrationReview />,
 };
 
 const SuperAdminDashboard = () => {
@@ -34,6 +36,7 @@ const SuperAdminDashboard = () => {
         <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('finance')}>Financial Management</button>
         <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('content')}>Content Management</button>
         <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('event')}>Event Management</button>
+        <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('eventRegistrations')}>Event Registration Review</button>
         <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('report')}>Reporting & Analytics</button>
       </div>
 

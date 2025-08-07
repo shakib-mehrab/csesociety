@@ -11,6 +11,7 @@ const eventRoutes = require('./routes/eventRoutes');
 const noticeRoutes = require('./routes/noticeRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const clubTaskRoutes = require('./routes/clubTaskRoutes');
 
 // Load env vars
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Mount routers
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/clubs', clubRoutes);
@@ -35,6 +37,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/notices', noticeRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/club-tasks', clubTaskRoutes);
 
 const PORT = process.env.PORT || 5000;
 

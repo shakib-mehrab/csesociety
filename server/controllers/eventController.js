@@ -18,7 +18,7 @@ const createEvent = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('Club not found');
     }
-    if (req.user.role === 'admin' && club.coordinator.toString() !== req.user._id.toString()) {
+    if ((req.user.role === 'admin' || req.user.role === 'coordinator') && club.coordinator.toString() !== req.user._id.toString()) {
         res.status(403);
         throw new Error('Not authorized to create events for this club');
     }
@@ -72,7 +72,7 @@ const updateEvent = asyncHandler(async (req, res) => {
   const event = await Event.findById(req.params.id);
 
   if (event) {
-    if (req.user.role === 'admin') {
+    if (req.user.role === 'admin' || req.user.role === 'coordinator') {
         const club = await Club.findById(event.clubId);
         if (!club || club.coordinator.toString() !== req.user._id.toString()) {
             res.status(403);
@@ -104,7 +104,7 @@ const deleteEvent = asyncHandler(async (req, res) => {
   const event = await Event.findById(req.params.id);
 
   if (event) {
-    if (req.user.role === 'admin') {
+    if (req.user.role === 'admin' || req.user.role === 'coordinator') {
         const club = await Club.findById(event.clubId);
         if (!club || club.coordinator.toString() !== req.user._id.toString()) {
             res.status(403);
@@ -145,7 +145,7 @@ const registerForEvent = asyncHandler(async (req, res) => {
 const getEventRegistrations = asyncHandler(async (req, res) => {
     const event = await Event.findById(req.params.id).populate('registeredUsers', 'name email studentId');
     if (event) {
-        if (req.user.role === 'admin') {
+        if (req.user.role === 'admin' || req.user.role === 'coordinator') {
             const club = await Club.findById(event.clubId);
             if (!club || club.coordinator.toString() !== req.user._id.toString()) {
                 res.status(403);

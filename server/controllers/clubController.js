@@ -78,7 +78,7 @@ const updateClub = asyncHandler(async (req, res) => {
 
   if (club) {
     // Club admin can only update certain fields
-    if (req.user.role === 'admin' && club.coordinator.toString() !== req.user._id.toString()) {
+    if ((req.user.role === 'admin' || req.user.role === 'coordinator') && club.coordinator.toString() !== req.user._id.toString()) {
         res.status(403);
         throw new Error('Not authorized to update this club');
     }
@@ -92,7 +92,7 @@ const updateClub = asyncHandler(async (req, res) => {
         club.coordinator = coordinator || club.coordinator;
     }
     
-    if (req.user.role === 'admin' || req.user.role === 'super_admin') {
+    if (['admin', 'coordinator', 'super_admin'].includes(req.user.role)) {
         club.subCoordinators = subCoordinators || club.subCoordinators;
     }
 

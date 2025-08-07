@@ -78,6 +78,10 @@ const getMe = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      studentId: user.studentId,
+      clubsJoined: user.clubsJoined,
+      department: user.department,
+      profilePicture: user.profilePicture,
     });
   } else {
     res.status(404);

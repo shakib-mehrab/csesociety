@@ -11,12 +11,12 @@ const {
 } = require('../controllers/eventController');
 const { protect, authorizeRoles } = require('../middleware/authMiddleware');
 
-router.post('/', protect, authorizeRoles('super_admin', 'admin'), createEvent);
+router.post('/', protect, authorizeRoles('super_admin', 'admin', 'coordinator'), createEvent);
 router.get('/', getAllEvents);
 router.get('/:id', getEventById);
-router.put('/:id', protect, authorizeRoles('super_admin', 'admin'), updateEvent);
-router.delete('/:id', protect, authorizeRoles('super_admin', 'admin'), deleteEvent);
+router.put('/:id', protect, authorizeRoles('super_admin', 'admin', 'coordinator'), updateEvent);
+router.delete('/:id', protect, authorizeRoles('super_admin', 'admin', 'coordinator'), deleteEvent);
 router.post('/:id/register', protect, authorizeRoles('member'), registerForEvent);
-router.get('/:id/registrations', protect, authorizeRoles('super_admin', 'admin'), getEventRegistrations);
+router.get('/:id/registrations', protect, authorizeRoles('super_admin', 'admin', 'coordinator'), getEventRegistrations);
 
 module.exports = router;

@@ -15,6 +15,7 @@ const DashboardPage = () => {
       case 'super_admin':
         return <SuperAdminDashboard />;
       case 'admin':
+      case 'coordinator':
         return <AdminDashboard />;
       case 'member':
         return <MemberDashboard />;

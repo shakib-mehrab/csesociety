@@ -18,7 +18,7 @@ const createNotice = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('Club not found');
     }
-    if (req.user.role === 'admin' && club.coordinator.toString() !== req.user._id.toString()) {
+    if ((req.user.role === 'admin' || req.user.role === 'coordinator') && club.coordinator.toString() !== req.user._id.toString()) {
         res.status(403);
         throw new Error('Not authorized to create notices for this club');
     }
@@ -73,7 +73,7 @@ const updateNotice = asyncHandler(async (req, res) => {
   const notice = await Notice.findById(req.params.id);
 
   if (notice) {
-    if (req.user.role === 'admin') {
+    if (req.user.role === 'admin' || req.user.role === 'coordinator') {
         const club = await Club.findById(notice.clubId);
         if (!club || club.coordinator.toString() !== req.user._id.toString()) {
             res.status(403);
@@ -101,7 +101,7 @@ const deleteNotice = asyncHandler(async (req, res) => {
   const notice = await Notice.findById(req.params.id);
 
   if (notice) {
-    if (req.user.role === 'admin') {
+    if (req.user.role === 'admin' || req.user.role === 'coordinator') {
         const club = await Club.findById(notice.clubId);
         if (!club || club.coordinator.toString() !== req.user._id.toString()) {
             res.status(403);
