@@ -4,7 +4,7 @@ import Navbar from './components/Common/Navbar';
 import Footer from './components/Common/Footer';
 import HomePage from './pages/HomePage';
 import ClubsPage from './pages/ClubsPage';
-import ClubDetails from './components/Clubs/ClubDetails';
+import ClubDetailsPage from './pages/ClubDetailsPage';
 import EventsPage from './pages/EventsPage';
 import EventDetails from './components/Events/EventDetails';
 import NoticesPage from './pages/NoticesPage';
@@ -28,7 +28,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/clubs" element={<ClubsPage />} />
-          <Route path="/clubs/:id" element={<ClubDetails />} />
+          <Route path="/clubs/:id" element={<ClubDetailsPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/:id" element={<EventDetails />} />
           <Route path="/notices" element={<NoticesPage />} />

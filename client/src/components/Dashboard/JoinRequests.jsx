@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 
@@ -31,10 +32,11 @@ const JoinRequests = () => {
     setLoading(true);
     setError('');
     try {
-      await api.put(`/clubs/requests/${requestId}`, { status: 'rejected' });
+      // Call DELETE endpoint to remove join request from DB
+      await api.delete(`/clubs/requests/${requestId}`);
       setRefresh(r => !r);
     } catch (err) {
-      setError('Failed to reject request');
+      setError('Failed to reject (delete) request');
     } finally {
       setLoading(false);
     }

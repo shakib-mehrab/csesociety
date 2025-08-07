@@ -12,6 +12,7 @@ const {
   processJoinRequest,
   getClubMembers,
   getAllJoinRequests,
+  deleteJoinRequest,
 } = require('../controllers/clubController');
 // Get all join requests (super admin)
 router.get('/requests', protect, authorizeRoles('super_admin','coordinator'), getAllJoinRequests);
@@ -23,6 +24,7 @@ router.put('/:id', protect, authorizeRoles('super_admin', 'admin', 'coordinator'
 router.delete('/:id', protect, authorizeRoles('super_admin'), deleteClub);
 router.post('/:id/join', protect, authorizeRoles('member'), sendJoinRequest);
 router.put('/requests/:requestId', protect, authorizeRoles('admin', 'super_admin', 'coordinator'), processJoinRequest);
+router.delete('/requests/:requestId', protect, authorizeRoles('admin', 'super_admin', 'coordinator'), deleteJoinRequest);
 router.get('/:id/members', protect, authorizeRoles('admin', 'super_admin', 'coordinator'), getClubMembers);
 
 module.exports = router;
