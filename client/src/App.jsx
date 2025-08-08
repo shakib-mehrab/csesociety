@@ -13,6 +13,7 @@ import ScholarshipPage from './pages/ScholarshipPage';
 import DashboardPage from './pages/DashboardPage';
 import UserProfilePage from './pages/UserProfilePage';
 import PaymentPage from './pages/PaymentPage';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import SignIn from './components/Auth/SignIn';
 import SignUp from './components/Auth/SignUp';
 import NotFoundPage from './pages/NotFoundPage';
@@ -37,6 +38,10 @@ function App() {
           
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
+
+          {/* Payment for club join (public, not protected) */}
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/payment/success" element={<PaymentSuccessPage />} />
           <Route path="/payments" element={<ProtectedRoute roles={['super_admin']}><PaymentPage /></ProtectedRoute>} />
 
           <Route path="*" element={<NotFoundPage />} />

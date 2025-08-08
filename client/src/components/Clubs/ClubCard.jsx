@@ -9,21 +9,13 @@ const ClubCard = ({ club }) => {
   const [joining, setJoining] = useState(false);
   const [joined, setJoined] = useState(false);
 
-  const handleJoin = async () => {
+  const handleJoin = () => {
     if (!user) {
       toast.error('Please sign in to join a club');
       return;
     }
-    setJoining(true);
-    try {
-      await api.post(`/clubs/${club._id}/join`);
-      toast.success('Join request sent!');
-      setJoined(true);
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to join club');
-    } finally {
-      setJoining(false);
-    }
+    // Redirect to payment page with clubId as query param
+    window.location.href = `/payment?clubId=${club._id}`;
   };
 
   return (

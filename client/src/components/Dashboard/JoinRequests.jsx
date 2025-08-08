@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 
@@ -32,7 +31,6 @@ const JoinRequests = () => {
     setLoading(true);
     setError('');
     try {
-      // Call DELETE endpoint to remove join request from DB
       await api.delete(`/clubs/requests/${requestId}`);
       setRefresh(r => !r);
     } catch (err) {
@@ -43,35 +41,72 @@ const JoinRequests = () => {
   };
 
   return (
-    <div>
-      <h3 className="text-xl font-bold mb-4">Club Join Requests</h3>
-      {error && <div className="text-red-500 mb-2">{error}</div>}
+    <div className="p-6 max-w-5xl mx-auto bg-gray-50 min-h-[60vh] rounded-lg shadow-md">
+      <h3 className="text-2xl font-extrabold mb-6 text-indigo-700 border-b pb-3">
+        Club Join Requests
+      </h3>
+
+      {error && (
+        <div className="mb-5 p-3 bg-red-100 text-red-700 rounded shadow-sm">
+          {error}
+        </div>
+      )}
+
       {loading ? (
-        <div>Loading...</div>
+        <div className="text-center py-16 text-indigo-600 font-semibold">
+          Loading join requests...
+        </div>
       ) : (
-        <table className="w-full border mt-4">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2 border">User</th>
-              <th className="p-2 border">Student ID</th>
-              <th className="p-2 border">Club</th>
-              <th className="p-2 border">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {requests.map(req => (
-              <tr key={req._id}>
-                <td className="p-2 border">{req.userId?.name} ({req.userId?.email})</td>
-                <td className="p-2 border">{req.userId?.studentId}</td>
-                <td className="p-2 border">{req.clubId?.name}</td>
-                <td className="p-2 border">
-                  <button className="bg-green-600 text-white px-2 py-1 rounded mr-2" onClick={() => handleApprove(req._id)}>Approve</button>
-                  <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={() => handleReject(req._id)}>Reject</button>
-                </td>
+        <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
+          <table className="min-w-full text-gray-700 text-sm border-collapse">
+            <thead className="bg-indigo-100 text-indigo-900 font-semibold select-none">
+              <tr>
+                <th className="p-4 border border-indigo-200 text-left rounded-tl-lg">User</th>
+                <th className="p-4 border border-indigo-200 text-left">Student ID</th>
+                <th className="p-4 border border-indigo-200 text-left">Club</th>
+                <th className="p-4 border border-indigo-200 text-left rounded-tr-lg">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {requests.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="p-6 text-center text-gray-500 font-medium">
+                    No join requests available.
+                  </td>
+                </tr>
+              ) : (
+                requests.map(req => (
+                  <tr
+                    key={req._id}
+                    className="hover:bg-indigo-50 transition cursor-default"
+                  >
+                    <td className="p-4 border border-indigo-200">
+                      {req.userId?.name} <span className="text-gray-500 text-xs">({req.userId?.email})</span>
+                    </td>
+                    <td className="p-4 border border-indigo-200">{req.userId?.studentId}</td>
+                    <td className="p-4 border border-indigo-200">{req.clubId?.name}</td>
+                    <td className="p-4 border border-indigo-200 space-x-3">
+                      <button
+                        onClick={() => handleApprove(req._id)}
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
+                        aria-label={`Approve join request from ${req.userId?.name}`}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleReject(req._id)}
+                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded-lg shadow transition"
+                        aria-label={`Reject join request from ${req.userId?.name}`}
+                      >
+                        Reject
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

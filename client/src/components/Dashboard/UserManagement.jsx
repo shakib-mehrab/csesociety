@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 const API_BASE = '/api/users';
@@ -62,59 +61,65 @@ const UserManagement = () => {
     }
   };
 
-  const handleApprove = async (userId) => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await fetch(`${API_BASE}/${userId}/approve`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${getAuthToken()}`,
-        },
-      });
-      if (!res.ok) throw new Error('Failed to approve user');
-      setRefresh(r => !r);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Pagination calculations
   const totalPages = Math.ceil(users.length / usersPerPage);
   const startIndex = (currentPage - 1) * usersPerPage;
   const currentUsers = users.slice(startIndex, startIndex + usersPerPage);
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h3 className="text-2xl font-semibold mb-6 text-gray-800">👥 User Management</h3>
+    <div className="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
+      <h3 className="text-3xl font-extrabold mb-8 text-indigo-700 border-b pb-3">
+        👥 User Management
+      </h3>
 
-      {error && <div className="bg-red-100 text-red-600 px-4 py-2 rounded mb-4">{error}</div>}
+      {error && (
+        <div className="mb-6 p-4 bg-red-100 text-red-700 rounded shadow-sm">
+          {error}
+        </div>
+      )}
+
       {loading ? (
-        <div className="text-center text-gray-600">Loading users...</div>
+        <div className="text-center text-indigo-600 font-semibold py-16">
+          Loading users...
+        </div>
       ) : (
         <>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm border-collapse rounded shadow overflow-hidden">
-              <thead className="bg-gray-100 text-gray-700 text-left">
+          {/* Users Table */}
+          <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
+            <table className="min-w-full text-sm text-gray-700 border-collapse">
+              <thead className="bg-indigo-100 text-indigo-900 font-semibold select-none">
                 <tr>
-                  <th className="p-3 border-b">Name</th>
-                  <th className="p-3 border-b">Email</th>
-                  <th className="p-3 border-b">Role</th>
-                  <th className="p-3 border-b">Actions</th>
+                  <th className="p-4 border-b border-indigo-200 text-left rounded-tl-lg">
+                    Name
+                  </th>
+                  <th className="p-4 border-b border-indigo-200 text-left">Email</th>
+                  <th className="p-4 border-b border-indigo-200 text-left">Role</th>
+                  <th className="p-4 border-b border-indigo-200 rounded-tr-lg text-left">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
+                {currentUsers.length === 0 && (
+                  <tr>
+                    <td colSpan="4" className="p-6 text-center text-gray-500">
+                      No users found.
+                    </td>
+                  </tr>
+                )}
                 {currentUsers.map(user => (
-                  <tr key={user._id} className="hover:bg-gray-50 transition">
-                    <td className="p-3 border-b">{user.name}</td>
-                    <td className="p-3 border-b">{user.email}</td>
-                    <td className="p-3 border-b capitalize">{user.role}</td>
-                    <td className="p-3 border-b">
+                  <tr
+                    key={user._id}
+                    className="hover:bg-indigo-50 transition cursor-default"
+                  >
+                    <td className="p-4 border-b border-indigo-200">{user.name}</td>
+                    <td className="p-4 border-b border-indigo-200">{user.email}</td>
+                    <td className="p-4 border-b border-indigo-200 capitalize">{user.role}</td>
+                    <td className="p-4 border-b border-indigo-200">
                       <button
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded shadow transition"
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1 rounded-lg shadow transition"
                         onClick={() => handleRoleChange(user)}
+                        aria-label={`Change role for ${user.name}`}
                       >
                         Change Role
                       </button>
@@ -126,25 +131,31 @@ const UserManagement = () => {
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex justify-end items-center gap-4 mt-4">
+          <div className="flex justify-end items-center gap-5 mt-6 select-none">
             <button
               onClick={() => setCurrentPage(prev => prev - 1)}
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded ${
-                currentPage === 1 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'
+              className={`px-5 py-2 rounded-lg font-semibold transition ${
+                currentPage === 1
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
               }`}
+              aria-label="Previous page"
             >
               Previous
             </button>
-            <span className="text-gray-700 font-medium">
+            <span className="text-indigo-900 font-semibold">
               Page {currentPage} of {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(prev => prev + 1)}
               disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded ${
-                currentPage === totalPages ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600'
+              className={`px-5 py-2 rounded-lg font-semibold transition ${
+                currentPage === totalPages
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
               }`}
+              aria-label="Next page"
             >
               Next
             </button>
@@ -152,24 +163,38 @@ const UserManagement = () => {
         </>
       )}
 
-      {/* Role change modal */}
+      {/* Role Change Modal */}
       {selectedUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md relative animate-fadeIn">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-5"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="changeRoleTitle"
+        >
+          <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full relative animate-fadeIn">
             <button
-              className="absolute top-2 right-3 text-gray-500 hover:text-red-600 text-2xl"
+              className="absolute top-4 right-4 text-gray-500 hover:text-red-600 text-3xl font-bold focus:outline-none"
               onClick={() => setSelectedUser(null)}
+              aria-label="Close role change modal"
             >
               &times;
             </button>
-            <h4 className="text-xl font-bold mb-4 text-gray-800">
-              Change Role for <span className="text-blue-600">{selectedUser.name}</span>
+
+            <h4
+              id="changeRoleTitle"
+              className="text-2xl font-extrabold mb-6 text-indigo-700"
+            >
+              Change Role for{' '}
+              <span className="text-indigo-900">{selectedUser.name}</span>
             </h4>
+
             <form onSubmit={handleRoleSubmit}>
               <select
-                className="border border-gray-300 rounded px-4 py-2 w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-xl border border-gray-300 px-5 py-3 mb-6
+                  focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
                 value={role}
                 onChange={e => setRole(e.target.value)}
+                aria-label="Select user role"
               >
                 <option value="member">Member</option>
                 <option value="sub_coordinator">Sub-Coordinator</option>
@@ -179,7 +204,7 @@ const UserManagement = () => {
               </select>
               <button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition shadow"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-full font-semibold shadow-lg transition"
               >
                 Update Role
               </button>
@@ -189,31 +214,58 @@ const UserManagement = () => {
       )}
 
       {/* Club Join Requests Section */}
-      <div className="mt-10">
-        <h4 className="text-xl font-bold mb-4 text-gray-800">Club Join Requests</h4>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm border-collapse rounded shadow overflow-hidden">
-            <thead className="bg-gray-100 text-gray-700 text-left">
+      <section className="mt-12">
+        <h4 className="text-2xl font-extrabold mb-6 text-indigo-700 border-b pb-2">
+          Club Join Requests
+        </h4>
+        <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
+          <table className="min-w-full text-sm text-gray-700 border-collapse">
+            <thead className="bg-indigo-100 text-indigo-900 font-semibold select-none">
               <tr>
-                <th className="p-3 border-b">User</th>
-                <th className="p-3 border-b">Student ID</th>
-                <th className="p-3 border-b">Club</th>
-                <th className="p-3 border-b">Status</th>
-                <th className="p-3 border-b">Actions</th>
+                <th className="p-4 border-b border-indigo-200 text-left rounded-tl-lg">
+                  User
+                </th>
+                <th className="p-4 border-b border-indigo-200 text-left">
+                  Student ID
+                </th>
+                <th className="p-4 border-b border-indigo-200 text-left">Club</th>
+                <th className="p-4 border-b border-indigo-200 text-left">Status</th>
+                <th className="p-4 border-b border-indigo-200 text-left rounded-tr-lg">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
+              {joinRequests.length === 0 && (
+                <tr>
+                  <td
+                    colSpan="5"
+                    className="p-6 text-center text-gray-500 font-medium"
+                  >
+                    No join requests.
+                  </td>
+                </tr>
+              )}
               {joinRequests.map(req => (
-                <tr key={req._id} className="hover:bg-gray-50 transition">
-                  <td className="p-3 border-b">{req.userId?.name} ({req.userId?.email})</td>
-                  <td className="p-3 border-b">{req.userId?.studentId}</td>
-                  <td className="p-3 border-b">{req.clubId?.name}</td>
-                  <td className="p-3 border-b capitalize">{req.status}</td>
-                  <td className="p-3 border-b space-x-2">
-                    {req.status === 'pending' && (
+                <tr
+                  key={req._id}
+                  className="hover:bg-indigo-50 transition cursor-default"
+                >
+                  <td className="p-4 border-b border-indigo-200">
+                    {req.userId?.name} ({req.userId?.email})
+                  </td>
+                  <td className="p-4 border-b border-indigo-200">
+                    {req.userId?.studentId}
+                  </td>
+                  <td className="p-4 border-b border-indigo-200">{req.clubId?.name}</td>
+                  <td className="p-4 border-b border-indigo-200 capitalize">
+                    {req.status}
+                  </td>
+                  <td className="p-4 border-b border-indigo-200 space-x-3">
+                    {req.status === 'pending' ? (
                       <>
                         <button
-                          className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded"
+                          className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow transition"
                           onClick={async () => {
                             setLoading(true);
                             try {
@@ -225,11 +277,12 @@ const UserManagement = () => {
                               setLoading(false);
                             }
                           }}
+                          aria-label={`Approve join request from ${req.userId?.name}`}
                         >
                           Approve
                         </button>
                         <button
-                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded"
+                          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow transition"
                           onClick={async () => {
                             setLoading(true);
                             try {
@@ -241,10 +294,15 @@ const UserManagement = () => {
                               setLoading(false);
                             }
                           }}
+                          aria-label={`Reject join request from ${req.userId?.name}`}
                         >
                           Reject
                         </button>
                       </>
+                    ) : (
+                      <span className="text-gray-500 font-medium capitalize">
+                        {req.status}
+                      </span>
                     )}
                   </td>
                 </tr>
@@ -252,7 +310,7 @@ const UserManagement = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
     </div>
   );
 };

@@ -30,7 +30,8 @@ const deleteJoinRequest = asyncHandler(async (req, res) => {
       await user.save();
     }
   }
-  await request.deleteOne();
+  // await request.deleteOne(); // previous logic to delete 
+   await ClubJoinRequest.findByIdAndDelete(requestId); //updated logic from gpt
   res.json({ message: "Join request deleted" });
 });
 

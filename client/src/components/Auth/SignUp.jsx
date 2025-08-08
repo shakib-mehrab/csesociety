@@ -69,65 +69,169 @@ const SignUp = () => {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 py-8 px-2">
       <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-xl border border-blue-100">
         <h2 className="text-3xl font-bold text-center text-blue-700 mb-8">Create Your Account</h2>
+
         <div className="flex flex-col items-center mb-6">
-          <div className="relative">
+          <div className="relative group">
             {photoPreview || formData.profilePicture ? (
               <img
                 src={photoPreview || formData.profilePicture}
                 alt="Profile Preview"
-                className="w-24 h-24 rounded-full object-cover border-4 border-blue-200 shadow"
+                className="w-28 h-28 rounded-full object-cover border-4 border-blue-300 shadow-lg transition-transform transform group-hover:scale-105"
               />
             ) : (
-              <span className="w-24 h-24 flex items-center justify-center rounded-full bg-blue-100 border-4 border-blue-200 shadow">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#3b82f6" className="w-14 h-14">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.5a7.5 7.5 0 1115 0v.75A2.25 2.25 0 0117.25 22.5h-10.5A2.25 2.25 0 014.5 20.25v-.75z" />
+              <div className="w-28 h-28 flex items-center justify-center rounded-full bg-gradient-to-tr from-blue-400 to-blue-600 border-4 border-blue-300 shadow-lg relative overflow-hidden">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="#ffffff"
+                  className="w-16 h-16 opacity-70"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 19.5a7.5 7.5 0 1115 0v.75A2.25 2.25 0 0117.25 22.5h-10.5A2.25 2.25 0 014.5 20.25v-.75z"
+                  />
                 </svg>
-              </span>
+                <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-40 transition-opacity rounded-full"></div>
+              </div>
             )}
-            <label className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-2 cursor-pointer shadow-lg hover:bg-blue-700 transition">
-              <input type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
-              <span className="flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75V7.5A2.25 2.25 0 014.5 5.25h3.379c.414 0 .789-.252.948-.633l.447-1.074A1.125 1.125 0 0110.293 3h3.414c.462 0 .88.274 1.019.693l.447 1.074c.159.381.534.633.948.633H19.5a2.25 2.25 0 012.25 2.25v11.25a2.25 2.25 0 01-2.25 2.25H4.5A2.25 2.25 0 012.25 18.75z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                </svg>
-              </span>
+            <label
+              htmlFor="photo-upload"
+              className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 cursor-pointer shadow-xl flex items-center justify-center transition-transform transform hover:scale-110"
+              title="Upload Profile Picture"
+            >
+              <input id="photo-upload" type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12l-4.5 4.5m0 0L7.5 12m4.5 4.5V3"
+                />
+              </svg>
             </label>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="name">
+              Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="Your full name"
+              required
+            />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="you@example.com"
+              required
+            />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Password</label>
-            <input type="password" name="password" value={formData.password} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="password">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="Enter a strong password"
+              required
+            />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Student ID</label>
-            <input type="text" name="studentId" value={formData.studentId} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="studentId">
+              Student ID
+            </label>
+            <input
+              id="studentId"
+              type="text"
+              name="studentId"
+              value={formData.studentId}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="e.g. 2023-12345"
+              required
+            />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Department</label>
-            <input type="text" name="department" value={formData.department} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="department">
+              Department
+            </label>
+            <input
+              id="department"
+              type="text"
+              name="department"
+              value={formData.department}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="e.g. CSE"
+              required
+            />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Phone</label>
-            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="phone">
+              Phone
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="+8801XXXXXXXXX"
+              required
+            />
           </div>
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Batch</label>
-            <input type="text" name="batch" value={formData.batch} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="batch">
+              Batch
+            </label>
+            <input
+              id="batch"
+              type="text"
+              name="batch"
+              value={formData.batch}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+              placeholder="e.g. 2023"
+              required
+            />
           </div>
         </div>
+
         <button
           type="submit"
-          className="w-full mt-8 bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition text-lg shadow"
+          className="w-full mt-8 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg"
           disabled={loading}
         >
           {loading ? 'Signing Up...' : 'Sign Up'}

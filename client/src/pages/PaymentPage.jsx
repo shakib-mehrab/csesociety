@@ -1,18 +1,41 @@
-import React from 'react';
-import PaymentRecordForm from '../components/Forms/PaymentRecordForm';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 const PaymentPage = () => {
-  // This page should be protected for Super Admins only
+  const location = useLocation();
+  const navigate = useNavigate();
+  const query = new URLSearchParams(location.search);
+  const clubId = query.get('clubId');
+
+  useEffect(() => {
+    if (!clubId) {
+      navigate('/clubs');
+      return;
+    }
+    // Initiate payment by calling backend
+    const startPayment = async () => {
+      try {
+        const res = await api.get(`/payments/init?clubId=${clubId}`);
+        if (res.data && res.data.GatewayPageURL) {
+          window.location.href = res.data.GatewayPageURL;
+        } else {
+          alert('Failed to initiate payment.');
+          navigate('/clubs');
+        }
+      } catch (err) {
+        alert('Failed to initiate payment.');
+        navigate('/clubs');
+        console.error('Payment initiation error:', err);
+      }
+    };
+    startPayment();
+  }, [clubId, navigate]);
+
   return (
-    <div className="container mx-auto mt-10">
-      <h1 className="text-3xl font-bold">Payment Management</h1>
-      <div className="mt-6">
-        <PaymentRecordForm />
-      </div>
-      <div className="mt-10">
-        <h2 className="text-2xl font-bold">All Payments</h2>
-        {/* Table of payments will go here */}
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-[60vh]">
+      <div className="text-xl font-semibold mb-4">Redirecting to payment gateway...</div>
+      <div className="text-gray-500">Please wait.</div>
     </div>
   );
 };
