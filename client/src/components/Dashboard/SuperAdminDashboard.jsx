@@ -19,6 +19,8 @@ import EventRegistrationReview from './EventRegistrationReview';
 import FinancialManagement from './FinancialManagement';
 import ReportingAnalytics from './ReportingAnalytics';
 import JoinRequests from './JoinRequests';
+// Scholarship Management
+import ScholarshipManagement from './ScholarshipManagement';
 
 const featureComponents = {
   user: <UserManagement />,
@@ -29,6 +31,7 @@ const featureComponents = {
   report: <ReportingAnalytics />,
   joinRequests: <JoinRequests />,
   eventRegistrations: <EventRegistrationReview />,
+  scholarship: <ScholarshipManagement />,
 };
 
 const features = [
@@ -39,6 +42,7 @@ const features = [
   { key: 'content', label: 'Content Management', icon: FileText },
   { key: 'event', label: 'Event Management', icon: Calendar },
   { key: 'eventRegistrations', label: 'Event Registration Review', icon: ClipboardCheck },
+  { key: 'scholarship', label: 'Scholarship Management', icon: DollarSign },
   { key: 'report', label: 'Reporting & Analytics', icon: BarChart2 },
 ];
 

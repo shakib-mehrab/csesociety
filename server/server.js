@@ -12,6 +12,7 @@ const noticeRoutes = require('./routes/noticeRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const clubTaskRoutes = require('./routes/clubTaskRoutes');
+const scholarshipRoutes = require('./routes/scholarshipRoutes');
 
 // Load env vars
 dotenv.config();
@@ -38,6 +39,7 @@ app.use('/api/notices', noticeRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/club-tasks', clubTaskRoutes);
+app.use('/api/scholarships', scholarshipRoutes);
 
 const PORT = process.env.PORT || 5000;
 

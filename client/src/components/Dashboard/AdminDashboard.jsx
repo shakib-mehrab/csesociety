@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState, useEffect } from 'react';
+import { FaUsers, FaUserCheck, FaBullhorn, FaStickyNote, FaCalendarAlt, FaClipboardList, FaBars, FaTimes } from 'react-icons/fa';
 import api from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -408,19 +409,34 @@ const ClubAnnouncements = () => {
 const featureComponents = {
   joinRequests: <ClubJoinRequests />,
   members: <ClubMembers />,
+  announcements: <ClubAnnouncements />,
   notices: <ClubNotices />,
   events: <ClubEvents />,
   registrations: <EventRegistrations />,
-  announcements: <ClubAnnouncements />,
 };
 
+
+
+const sidebarLinks = [
+  { key: 'joinRequests', label: 'Join Requests', icon: <FaUserCheck size={18} /> },
+  { key: 'members', label: 'Members', icon: <FaUsers size={18} /> },
+  { key: 'announcements', label: 'Announcements', icon: <FaBullhorn size={18} /> },
+  { key: 'notices', label: 'Notices', icon: <FaStickyNote size={18} /> },
+  { key: 'events', label: 'Events', icon: <FaCalendarAlt size={18} /> },
+  { key: 'registrations', label: 'Registrations', icon: <FaClipboardList size={18} /> },
+];
 
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [club, setClub] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeFeature, setActiveFeature] = useState(null);
-  const handleOpen = (feature) => setActiveFeature(feature);
+  const [activeFeature, setActiveFeature] = useState('announcements');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleOpen = (feature) => {
+    setActiveFeature(feature);
+    setSidebarOpen(false);
+  };
   const handleClose = () => setActiveFeature(null);
 
   useEffect(() => {
@@ -432,33 +448,79 @@ const AdminDashboard = () => {
       .catch(() => setLoading(false));
   }, [user]);
 
+  // Custom scrollbar styles
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      ::-webkit-scrollbar { width: 8px; background: #f1f1f1; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    `;
+    document.head.appendChild(style);
+    return () => { document.head.removeChild(style); };
+  }, []);
+
   return (
-    <div>
-      <div className="flex items-center mb-6">
-        {club?.logo && <img src={club.logo} alt="Club Logo" className="h-16 w-16 object-contain rounded-full mr-4 border" />}
-        <div>
-          <h2 className="text-2xl font-bold">{club?.name || 'Admin Dashboard'}</h2>
-          {club?.description && <div className="text-gray-600 text-sm mt-1">{club.description}</div>}
+    <div className="min-h-screen bg-gray-50 flex font-sans">
+      {/* Sidebar */}
+      <div className={`
+        fixed md:static z-40 top-0 left-0 h-full md:h-auto w-64 md:w-60 bg-white shadow-lg md:shadow-none transition-transform duration-300
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:translate-x-0
+        flex flex-col
+        md:sticky md:top-0
+      `} style={{ maxHeight: '100vh' }}>
+        <div className="flex items-center justify-between px-6 py-4 border-b">
+          <div className="flex items-center">
+            {club?.logo && <img src={club.logo} alt="Club Logo" className="h-10 w-10 object-contain rounded-full border mr-2" />}
+            <span className="font-bold text-lg text-gray-800">{club?.name || 'Admin'}</span>
+          </div>
+          <button className="md:hidden text-gray-600 hover:text-black" onClick={() => setSidebarOpen(false)}><FaTimes size={22} /></button>
         </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-        <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('joinRequests')}>Manage Join Requests</button>
-        <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('members')}>Manage Club Members</button>
-        <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('announcements')}>Club Announcements</button>
-        <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('notices')}>Club Notices</button>
-        <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('events')}>Host Club Events</button>
-        <button className="bg-white p-4 rounded-lg shadow hover:bg-gray-100 transition" onClick={() => handleOpen('registrations')}>Event Registrations</button>
+        <nav className="flex-1 overflow-y-auto py-4 px-2 custom-scrollbar">
+          {sidebarLinks.map(link => (
+            <button
+              key={link.key}
+              className={`flex items-center w-full px-4 py-2 mb-2 rounded-lg font-medium text-base transition-all
+                ${activeFeature === link.key
+                  ? 'bg-blue-100 text-blue-700 shadow-md'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow'}
+                focus:outline-none focus:ring-2 focus:ring-blue-300
+              `}
+              style={{ fontWeight: activeFeature === link.key ? 600 : 500 }}
+              onClick={() => handleOpen(link.key)}
+            >
+              <span className="mr-3 text-lg">{link.icon}</span>
+              {link.label}
+            </button>
+          ))}
+        </nav>
+        <div className="hidden md:block px-6 pb-4 text-xs text-gray-400">&copy; {new Date().getFullYear()} Club Admin</div>
       </div>
 
-      {/* Modal for feature sections */}
-      {activeFeature && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl relative">
-            <button className="absolute top-2 right-2 text-gray-500 hover:text-black" onClick={handleClose}>&times;</button>
-            {featureComponents[activeFeature]}
+      {/* Hamburger for mobile */}
+      <button
+        className="fixed top-4 left-4 z-50 md:hidden bg-white p-2 rounded-full shadow-lg border border-gray-200"
+        onClick={() => setSidebarOpen(true)}
+        style={{ display: sidebarOpen ? 'none' : 'block' }}
+        aria-label="Open sidebar"
+      >
+        <FaBars size={22} />
+      </button>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col items-center px-2 md:px-8 py-8 md:py-12 overflow-y-auto" style={{ minHeight: '100vh' }}>
+        <div className="w-full max-w-4xl bg-white rounded-xl shadow p-6 md:p-10 custom-scrollbar">
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-gray-900 mb-1">{club?.name || 'Admin Dashboard'}</h2>
+            {club?.description && <div className="text-gray-600 text-base mt-1">{club.description}</div>}
+          </div>
+          <div className="min-h-[300px]">
+            {activeFeature ? featureComponents[activeFeature] : <div className="text-gray-500">Select a feature from the sidebar.</div>}
           </div>
         </div>
-      )}
+      </main>
+      {/* Modal for feature sections (if you want to keep modal for mobile, can adapt here) */}
     </div>
   );
 };

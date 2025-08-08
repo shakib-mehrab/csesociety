@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
@@ -6,21 +7,23 @@ import {
 } from 'lucide-react';
 
 // Section Card Component
-const Section = ({ icon: Icon, title, children }) => (
-  <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-    <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 mb-4">
-      <Icon className="w-5 h-5 text-blue-600" />
-      {title}
+const Section = ({ icon: Icon, title, children, color }) => (
+  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow p-6 flex flex-col">
+    <h3 className="text-lg font-semibold flex items-center gap-3 mb-4">
+      <span className={`p-2 rounded-lg ${color} bg-opacity-10`}>
+        <Icon className={`w-5 h-5 ${color.replace('bg', 'text')}`} />
+      </span>
+      <span className="text-gray-800">{title}</span>
     </h3>
-    {children}
+    <div className="flex-1">{children}</div>
   </div>
 );
 
 // Reusable List Item
 const ListItem = ({ title, content, extra }) => (
-  <li className="border-b border-gray-200 py-2">
-    <p className="font-medium text-gray-800">{title}</p>
-    {content && <p className="text-gray-600 text-sm">{content}</p>}
+  <li className="py-3 border-b border-gray-100 last:border-none hover:bg-gray-50 px-3 rounded-lg transition-colors">
+    <p className="font-medium text-gray-900">{title}</p>
+    {content && <p className="text-gray-600 text-sm mt-0.5">{content}</p>}
     {extra && <p className="text-sm text-gray-500 mt-1">{extra}</p>}
   </li>
 );
@@ -69,17 +72,20 @@ const MemberDashboard = () => {
   }, [allEvents, user]);
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-2">
-        <ClipboardList className="w-6 h-6 text-blue-600" />
-        {user?.name || 'Member'}
-      </h2>
+    <div className="max-w-7xl mx-auto px-6 py-10">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-10">
+        <ClipboardList className="w-8 h-8 text-blue-600" />
+        <h2 className="text-3xl font-bold text-gray-900">
+          Welcome back, {user?.name || 'Member'}
+        </h2>
+      </div>
 
+      {/* Sections */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {/* My Clubs */}
-        <Section title="My Clubs" icon={Users}>
+        <Section title="My Clubs" icon={Users} color="bg-blue-500">
           {clubs.length === 0 ? (
-            <div className="text-gray-600">No clubs joined.</div>
+            <div className="text-gray-500 text-sm">No clubs joined.</div>
           ) : (
             <ul>
               {clubs.map(c => (
@@ -89,10 +95,9 @@ const MemberDashboard = () => {
           )}
         </Section>
 
-        {/* Club Notices */}
-        <Section title="Club Notices" icon={Bell}>
+        <Section title="Club Notices" icon={Bell} color="bg-green-500">
           {clubNotices.length === 0 ? (
-            <div className="text-gray-600">No club notices.</div>
+            <div className="text-gray-500 text-sm">No club notices.</div>
           ) : (
             <ul>
               {clubNotices.map(n => (
@@ -106,10 +111,9 @@ const MemberDashboard = () => {
           )}
         </Section>
 
-        {/* Club Events */}
-        <Section title="Club Events" icon={Calendar}>
+        <Section title="Club Events" icon={Calendar} color="bg-purple-500">
           {clubEvents.length === 0 ? (
-            <div className="text-gray-600">No club events.</div>
+            <div className="text-gray-500 text-sm">No club events.</div>
           ) : (
             <ul>
               {clubEvents.map(e => (
@@ -123,10 +127,9 @@ const MemberDashboard = () => {
           )}
         </Section>
 
-        {/* Society Notices */}
-        <Section title="Society Notices" icon={AlertCircle}>
+        <Section title="Society Notices" icon={AlertCircle} color="bg-red-500">
           {societyNotices.length === 0 ? (
-            <div className="text-gray-600">No society notices.</div>
+            <div className="text-gray-500 text-sm">No society notices.</div>
           ) : (
             <ul>
               {societyNotices.map(n => (
@@ -140,10 +143,9 @@ const MemberDashboard = () => {
           )}
         </Section>
 
-        {/* Other Events */}
-        <Section title="Other Events (Society & Other Clubs)" icon={Calendar}>
+        <Section title="Other Events" icon={Calendar} color="bg-yellow-500">
           {otherEvents.length === 0 ? (
-            <div className="text-gray-600">No other events.</div>
+            <div className="text-gray-500 text-sm">No other events.</div>
           ) : (
             <ul>
               {otherEvents.map(e => (
@@ -157,10 +159,9 @@ const MemberDashboard = () => {
           )}
         </Section>
 
-        {/* Registered Events */}
-        <Section title="My Registered Events" icon={BookMarked}>
+        <Section title="My Registered Events" icon={BookMarked} color="bg-indigo-500">
           {registeredEvents.length === 0 ? (
-            <div className="text-gray-600">No registered events.</div>
+            <div className="text-gray-500 text-sm">No registered events.</div>
           ) : (
             <ul>
               {registeredEvents.map(e => (

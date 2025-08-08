@@ -1,12 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import LoadingSpinner from '../Common/LoadingSpinner';
 import toast from 'react-hot-toast';
 import { formatDate } from '../../utils/helpers';
+import { ArrowLeft, Calendar } from 'lucide-react';
 
 const EventDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,22 +29,52 @@ const EventDetails = () => {
 
   const handleRegister = async () => {
     try {
-        await api.post(`/events/${id}/register`);
-        toast.success('Registered for event!');
+      await api.post(`/events/${id}/register`);
+      toast.success('Registered for event!');
     } catch (error) {
-        toast.error(error.response?.data?.message || 'Failed to register for event');
+      toast.error(error.response?.data?.message || 'Failed to register for event');
     }
-  }
+  };
 
   if (loading) return <LoadingSpinner />;
-  if (!event) return <div>Event not found</div>;
+  if (!event) return <div className="text-center mt-20 text-gray-500">Event not found</div>;
 
   return (
-    <div className="container mx-auto mt-10">
-      <h2 className="text-3xl font-bold">{event.title}</h2>
-      <p className="mt-2 text-lg">{formatDate(event.date)} at {event.time}</p>
-      <p className="mt-4">{event.description}</p>
-      <button onClick={handleRegister} className="mt-4 bg-blue-500 text-white p-2 rounded">Register</button>
+    <div className="min-h-screen bg-gray-50 pb-12">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-10 px-6 md:px-16 shadow-md">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-sm mb-6 opacity-80 hover:opacity-100 transition"
+        >
+          <ArrowLeft size={18} /> Back to Events
+        </button>
+
+        <h1 className="text-3xl md:text-4xl font-bold leading-tight">{event.title}</h1>
+
+        <div className="flex items-center gap-3 mt-3 text-sm opacity-90">
+          <Calendar size={18} />
+          <span>
+            {formatDate(event.date)} at {event.time}
+          </span>
+        </div>
+      </div>
+
+      {/* Details Section */}
+      <div className="max-w-5xl mx-auto px-4 md:px-8 -mt-8">
+        <div className="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+          <p className="text-gray-700 leading-relaxed">{event.description}</p>
+
+          <div className="mt-8">
+            <button
+              onClick={handleRegister}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-transform transform hover:scale-105"
+            >
+              Register Now
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

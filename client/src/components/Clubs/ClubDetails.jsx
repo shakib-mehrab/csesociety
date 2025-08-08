@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../../services/api';
 import LoadingSpinner from '../Common/LoadingSpinner';
 import toast from 'react-hot-toast';
+import { useAuth } from '../../hooks/useAuth';
 
 const ClubDetails = () => {
+  const { user } = useAuth();
   const { id } = useParams();
   const [club, setClub] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,14 +26,14 @@ const ClubDetails = () => {
     fetchClub();
   }, [id]);
 
-  const handleJoin = async () => {
-    try {
-        await api.post(`/clubs/${id}/join`);
-        toast.success('Join request sent!');
-    } catch (error) {
-        toast.error(error.response?.data?.message || 'Failed to send join request');
+const handleJoin = () => {
+    if (!user) {
+      toast.error('Please sign in to join a club');
+      return;
     }
-  }
+    // Redirect to payment page with clubId as query param
+    window.location.href = `/payment?clubId=${club._id}`;
+  };
 
   if (loading) return <LoadingSpinner />;
   if (!club) return <div>Club not found</div>;
