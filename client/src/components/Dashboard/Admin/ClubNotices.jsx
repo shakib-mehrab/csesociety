@@ -10,6 +10,7 @@ const ClubNotices = () => {
   const [form, setForm] = useState({ title: '', content: '', expiresAt: '' });
   const [editId, setEditId] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const [viewNotice, setViewNotice] = useState(null);
   const clubId = user?.clubsJoined[0];
 
   useEffect(() => {
@@ -125,38 +126,44 @@ const ClubNotices = () => {
         </div>
       </form>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border border-gray-200 rounded-lg overflow-hidden">
-          <thead className="bg-gray-50 text-gray-700">
+      <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm mt-6">
+        <table className="w-full table-auto text-sm">
+          <thead className="bg-gradient-to-r from-blue-100 to-blue-50 text-blue-900">
             <tr>
-              <th className="py-3 px-4 text-left">Title</th>
-              <th className="py-3 px-4 text-left">Content</th>
-              <th className="py-3 px-4 text-left">Expires</th>
-              <th className="py-3 px-4 text-left">Actions</th>
+              <th className="py-3 px-4 text-left font-semibold">Title</th>
+              <th className="py-3 px-4 text-left font-semibold">Content</th>
+              <th className="py-3 px-4 text-left font-semibold">Expires</th>
+              <th className="py-3 px-4 text-left font-semibold">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white">
             {notices.length === 0 ? (
               <tr>
-                <td colSpan={4} className="py-4 px-4 text-center text-gray-500">
-                  No notices
-                </td>
+                <td colSpan={4} className="py-4 px-4 text-center text-gray-500">No notices</td>
               </tr>
             ) : (
               notices.map(n => (
-                <tr key={n._id} className="hover:bg-gray-50 transition-colors">
-                  <td className="py-3 px-4">{n.title}</td>
-                  <td className="py-3 px-4">{n.content.split(' ').slice(0, 5).join(' ')}{n.content.split(' ').length > 5 ? '...' : ''}</td>
-                  <td className="py-3 px-4">{n.expiresAt ? n.expiresAt.slice(0, 10) : '-'}</td>
-                  <td className="py-3 px-4 space-x-2">
+                <tr key={n._id} className="hover:bg-blue-50 transition-colors border-b last:border-b-0">
+                  <td className="py-3 px-4 font-medium">{n.title}</td>
+                  <td className="py-3 px-4">
+                    {n.content.split(' ').slice(0, 5).join(' ')}{n.content.split(' ').length > 5 ? '...' : ''}
                     <button
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-lg transition"
+                      className="ml-2 text-blue-600 underline hover:text-blue-800 text-xs font-semibold"
+                      onClick={() => setViewNotice(n)}
+                    >
+                      View
+                    </button>
+                  </td>
+                  <td className="py-3 px-4">{n.expiresAt ? n.expiresAt.slice(0, 10) : '-'}</td>
+                  <td className="py-3 px-4 space-x-2 flex flex-wrap items-center gap-2">
+                    <button
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-lg transition shadow-sm"
                       onClick={() => handleEdit(n)}
                     >
                       Edit
                     </button>
                     <button
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition"
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg transition shadow-sm"
                       onClick={() => handleDelete(n._id)}
                     >
                       Delete
@@ -168,6 +175,24 @@ const ClubNotices = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Notice Details Modal */}
+      {viewNotice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+          <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-lg relative">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl"
+              onClick={() => setViewNotice(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <h3 className="text-xl font-bold mb-2 text-blue-700">{viewNotice.title}</h3>
+            <div className="mb-2 text-gray-700 whitespace-pre-line">{viewNotice.content}</div>
+            <div className="text-sm text-gray-500">Expires: {viewNotice.expiresAt ? viewNotice.expiresAt.slice(0, 10) : '-'}</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
