@@ -17,6 +17,9 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [role, setRole] = useState('');
   const [refresh, setRefresh] = useState(false);
+  const [clubs, setClubs] = useState([]);
+  const [clubId, setClubId] = useState('');
+  const [position, setPosition] = useState('');
   const [deleteUserId, setDeleteUserId] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
@@ -46,15 +49,17 @@ const UserManagement = () => {
     Promise.all([
       api.get('/users'),
       api.get('/clubs/requests'),
+      api.get('/clubs'),
     ])
-      .then(([usersRes, joinReqRes]) => {
+      .then(([usersRes, joinReqRes, clubsRes]) => {
         setUsers(usersRes.data);
         setJoinRequests(joinReqRes.data);
+        setClubs(clubsRes.data);
         setCurrentPage(1);
         setLoading(false);
       })
       .catch(() => {
-        setError('Failed to load users or join requests');
+        setError('Failed to load users, clubs, or join requests');
         setLoading(false);
       });
   }, [refresh]);
@@ -62,13 +67,32 @@ const UserManagement = () => {
   const handleRoleChange = (user) => {
     setSelectedUser(user);
     setRole(user.role);
+    setClubId('');
+    setPosition('');
   };
 
   const handleRoleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    // Validate
+    if (!role) {
+      setError('Please select a role.');
+      setLoading(false);
+      return;
+    }
+    if ((role === 'coordinator' || role === 'sub_coordinator') && !clubId) {
+      setError('Please select a club for this position.');
+      setLoading(false);
+      return;
+    }
+    if ((role === 'coordinator' || role === 'sub_coordinator') && !position) {
+      setError('Please select a position.');
+      setLoading(false);
+      return;
+    }
     try {
+      // 1. Update user role
       const res = await fetch(`${API_BASE}/${selectedUser._id}/role`, {
         method: 'PUT',
         headers: {
@@ -78,6 +102,30 @@ const UserManagement = () => {
         body: JSON.stringify({ role }),
       });
       if (!res.ok) throw new Error('Failed to update role');
+
+      // 2. If coordinator/sub_coordinator, update club
+      if (role === 'coordinator' || role === 'sub_coordinator') {
+        // Fetch club
+        const club = clubs.find(c => c._id === clubId);
+        if (!club) throw new Error('Club not found');
+        let clubUpdate = {};
+        if (position === 'coordinator') {
+          clubUpdate.coordinator = selectedUser._id;
+          // Remove from subCoordinators if present
+          clubUpdate.subCoordinators = (club.subCoordinators || []).filter(u => u._id !== selectedUser._id);
+        } else if (position === 'sub_coordinator') {
+          clubUpdate.subCoordinators = [
+            ...((club.subCoordinators || []).map(u => u._id)),
+            selectedUser._id
+          ];
+          // If user was coordinator, demote
+          if (club.coordinator === selectedUser._id) {
+            clubUpdate.coordinator = null;
+          }
+        }
+        // PATCH/PUT club
+        await api.put(`/clubs/${clubId}`, clubUpdate);
+      }
       setSelectedUser(null);
       setRefresh(r => !r);
     } catch (err) {
@@ -294,22 +342,53 @@ const UserManagement = () => {
             </h4>
 
             <form onSubmit={handleRoleSubmit}>
+              <label className="block mb-2 font-semibold">Role</label>
               <select
-                className="w-full rounded-xl border px-5 py-3 mb-6 focus:outline-none focus:ring-2 transition shadow-sm"
-                style={{
-                  borderColor: colors.medium,
-                  color: colors.darkest,
-                }}
+                className="w-full rounded-xl border px-5 py-3 mb-4 focus:outline-none focus:ring-2 transition shadow-sm"
+                style={{ borderColor: colors.medium, color: colors.darkest }}
                 value={role}
                 onChange={e => setRole(e.target.value)}
                 aria-label="Select user role"
               >
+                <option value="">Select role</option>
                 <option value="member">Member</option>
                 <option value="sub_coordinator">Sub-Coordinator</option>
                 <option value="coordinator">Coordinator</option>
                 <option value="admin">Admin</option>
                 <option value="super_admin">Super Admin</option>
               </select>
+
+              {(role === 'coordinator' || role === 'sub_coordinator') && (
+                <>
+                  <label className="block mb-2 font-semibold">Club</label>
+                  <select
+                    className="w-full rounded-xl border px-5 py-3 mb-4 focus:outline-none focus:ring-2 transition shadow-sm"
+                    style={{ borderColor: colors.medium, color: colors.darkest }}
+                    value={clubId}
+                    onChange={e => setClubId(e.target.value)}
+                    aria-label="Select club"
+                  >
+                    <option value="">Select club</option>
+                    {clubs.map(club => (
+                      <option key={club._id} value={club._id}>{club.name}</option>
+                    ))}
+                  </select>
+                  <label className="block mb-2 font-semibold">Position</label>
+                  <select
+                    className="w-full rounded-xl border px-5 py-3 mb-6 focus:outline-none focus:ring-2 transition shadow-sm"
+                    style={{ borderColor: colors.medium, color: colors.darkest }}
+                    value={position}
+                    onChange={e => setPosition(e.target.value)}
+                    aria-label="Select position"
+                  >
+                    <option value="">Select position</option>
+                    <option value="coordinator">Coordinator</option>
+                    <option value="sub_coordinator">Sub-Coordinator</option>
+                  </select>
+                </>
+              )}
+
+              {error && <div className="text-red-600 mb-2">{error}</div>}
               <button
                 type="submit"
                 className="w-full py-3 rounded-full font-semibold shadow-lg transition"
@@ -319,8 +398,9 @@ const UserManagement = () => {
                 }}
                 onMouseOver={e => e.currentTarget.style.backgroundColor = colors.dark}
                 onMouseOut={e => e.currentTarget.style.backgroundColor = colors.medium}
+                disabled={loading}
               >
-                Update Role
+                {loading ? 'Updating...' : 'Update Role & Position'}
               </button>
             </form>
           </div>
