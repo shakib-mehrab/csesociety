@@ -5,7 +5,7 @@ const User = require("../models/User");
 // @route   GET /api/users
 // @access  Private/Super_Admin
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate('clubsJoined', '_id name');
   res.json(users);
 });
 

@@ -112,6 +112,7 @@ const UserManagement = () => {
                   </th>
                   <th className="p-4 border-b border-indigo-200 text-left">Email</th>
                   <th className="p-4 border-b border-indigo-200 text-left">Role</th>
+                  <th className="p-4 border-b border-indigo-200 text-left">Clubs Joined</th>
                   <th className="p-4 border-b border-indigo-200 rounded-tr-lg text-left">
                     Actions
                   </th>
@@ -120,7 +121,7 @@ const UserManagement = () => {
               <tbody>
                 {currentUsers.length === 0 && (
                   <tr>
-                    <td colSpan="4" className="p-6 text-center text-gray-500">
+                    <td colSpan="5" className="p-6 text-center text-gray-500">
                       No users found.
                     </td>
                   </tr>
@@ -133,6 +134,17 @@ const UserManagement = () => {
                     <td className="p-4 border-b border-indigo-200">{user.name}</td>
                     <td className="p-4 border-b border-indigo-200">{user.email}</td>
                     <td className="p-4 border-b border-indigo-200 capitalize">{user.role}</td>
+                    <td className="p-4 border-b border-indigo-200">
+                      {user.clubsJoined && user.clubsJoined.length > 0 ? (
+                        <ul className="list-disc pl-4">
+                          {user.clubsJoined.map(club => (
+                            <li key={club._id || club}>{club.name || club}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span className="text-gray-400">None</span>
+                      )}
+                    </td>
                     <td className="p-4 border-b border-indigo-200 flex gap-2">
                       <button
                         className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1 rounded-lg shadow transition"
