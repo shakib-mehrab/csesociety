@@ -4,7 +4,6 @@ import { useAuth } from '../../../hooks/useAuth';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-
 const ClubEvents = () => {
   const { user } = useAuth();
   const [events, setEvents] = useState([]);
@@ -19,12 +18,10 @@ const ClubEvents = () => {
   useEffect(() => {
     if (!clubId) return;
     setLoading(true);
-    // Get all events (not just this club's) to allow view-only for others
     api.get('/events')
       .then(res => { setEvents(res.data); setLoading(false); })
       .catch(() => { setError('Failed to load events'); setLoading(false); });
   }, [clubId, refresh]);
-
 
   const handleInput = e => setForm({ ...form, [e.target.name]: e.target.value });
   const handleDateChange = date => setForm(f => ({ ...f, date }));
@@ -83,24 +80,13 @@ const ClubEvents = () => {
     }
   };
 
-
-  if (loading) {
-    return (
-      <div className="flex justify-center py-6 text-gray-600 text-lg">Loading...</div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-red-500 bg-red-50 p-3 rounded-lg border border-red-200 mb-4">{error}</div>
-    );
-  }
-
-  // Only allow edit/delete for this club's events
   const canEditOrDelete = (event) => event.clubId && (event.clubId._id === clubId || event.clubId === clubId);
 
+  if (loading) return <div className="flex justify-center py-6 text-gray-600 text-lg">Loading...</div>;
+  if (error) return <div className="text-red-500 bg-red-50 p-3 rounded-lg border border-red-200 mb-4">{error}</div>;
+
   return (
-    <div className="bg-white shadow-md rounded-xl p-6">
+    <div className="bg-[#eaeaec] shadow-md rounded-xl p-6">
       <h4 className="font-semibold text-lg mb-4 text-gray-800">Club Events</h4>
 
       <div className="mb-6">
@@ -122,68 +108,92 @@ const ClubEvents = () => {
             >
               &times;
             </button>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-3">
+              
+              {/* Select Club */}
+              <select
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                value={clubId || ''}
+                disabled
+              >
+                <option value="">Select Club</option>
+                {user?.clubsJoined?.map(club => (
+                  <option key={club} value={club}>{club}</option>
+                ))}
+              </select>
+
               <input
                 name="title"
                 value={form.title}
                 onChange={handleInput}
                 placeholder="Title"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
+
               <textarea
                 name="description"
                 value={form.description}
                 onChange={handleInput}
                 placeholder="Description"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
                 rows={4}
                 required
               />
-              <DatePicker
-                selected={form.date}
-                onChange={handleDateChange}
-                placeholderText="Event Date"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-                dateFormat="yyyy-MM-dd"
-              />
+
+              <div className="relative">
+                <DatePicker
+                  selected={form.date}
+                  onChange={handleDateChange}
+                  placeholderText="Event Date"
+                  className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                  dateFormat="yyyy-MM-dd"
+                  required
+                />
+              </div>
+
               <input
                 name="time"
                 value={form.time}
                 onChange={handleInput}
                 placeholder="Time"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
+
               <input
                 name="venue"
                 value={form.venue}
                 onChange={handleInput}
                 placeholder="Venue"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
-              <DatePicker
-                selected={form.registrationDeadline}
-                onChange={handleRegDeadlineChange}
-                placeholderText="Registration Deadline"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-500"
-                dateFormat="yyyy-MM-dd"
-              />
+
+              <div className="relative">
+                <DatePicker
+                  selected={form.registrationDeadline}
+                  onChange={handleRegDeadlineChange}
+                  placeholderText="Registration Deadline"
+                  className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                  dateFormat="yyyy-MM-dd"
+                />
+              </div>
+
               <input
                 type="number"
                 name="fee"
                 value={form.fee}
                 onChange={handleInput}
                 placeholder="Fee"
-                className="border border-gray-300 p-3 rounded-lg w-full mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 min={0}
               />
-              <div>
+
+              <div className="flex gap-3">
                 <button
                   type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg mr-3 transition"
+                  className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
                 >
                   {editId ? 'Update' : 'Create'}
                 </button>
@@ -227,7 +237,7 @@ const ClubEvents = () => {
                     {canEditOrDelete(e) ? (
                       <>
                         <button
-                          className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-lg transition"
+                          className="bg-[#025498] hover:bg-[#012047] text-white px-3 py-1.5 rounded-lg transition"
                           onClick={() => handleEdit(e)}
                         >
                           Edit

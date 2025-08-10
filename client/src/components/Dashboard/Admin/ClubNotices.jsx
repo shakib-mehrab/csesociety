@@ -84,7 +84,7 @@ const ClubNotices = () => {
           value={form.title}
           onChange={handleInput}
           placeholder="Title"
-          className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-[#01264c]"
           required
         />
         <textarea
@@ -92,7 +92,7 @@ const ClubNotices = () => {
           value={form.content}
           onChange={handleInput}
           placeholder="Content"
-          className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+          className="border border-gray-300 p-3 rounded-lg w-full mb-3 focus:outline-none focus:ring-2 focus:ring-[#01264c] resize-none"
           rows={4}
           required
         />
@@ -101,12 +101,12 @@ const ClubNotices = () => {
           name="expiresAt"
           value={form.expiresAt}
           onChange={handleInput}
-          className="border border-gray-300 p-3 rounded-lg w-full mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="border border-gray-300 p-3 rounded-lg w-full mb-4 focus:outline-none focus:ring-2 focus:ring-[#01264c]"
         />
         <div>
           <button
             type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg mr-3 transition"
+            className="bg-[#003e74] hover:bg-[#002d5c] text-white px-5 py-2 rounded-lg mr-3 transition"
           >
             {editId ? 'Update' : 'Publish'}
           </button>

@@ -10,17 +10,21 @@ const ClubMembers = () => {
 
   useEffect(() => {
     if (!user) return;
-    setLoading(true);
-    const clubId = user.clubsJoined[0];
-    api.get(`/clubs/${clubId}/members`)
-      .then(res => { 
-        setMembers(res.data); 
-        setLoading(false); 
-      })
-      .catch(() => { 
-        setError('Failed to load members'); 
-        setLoading(false); 
-      });
+
+    const fetchMembers = async () => {
+      setLoading(true);
+      try {
+        const clubId = user.clubsJoined[0];
+        const { data } = await api.get(`/clubs/${clubId}/members`);
+        setMembers(data);
+      } catch {
+        setError('Failed to load members');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMembers();
   }, [user]);
 
   if (loading) {
@@ -65,14 +69,14 @@ const ClubMembers = () => {
                 </td>
               </tr>
             ) : (
-              members.map(m => (
+              members.map(({ _id, name, email, studentId }) => (
                 <tr
-                  key={m._id}
+                  key={_id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  <td className="py-3 px-4">{m.name}</td>
-                  <td className="py-3 px-4">{m.email}</td>
-                  <td className="py-3 px-4">{m.studentId}</td>
+                  <td className="py-3 px-4">{name}</td>
+                  <td className="py-3 px-4">{email}</td>
+                  <td className="py-3 px-4">{studentId}</td>
                 </tr>
               ))
             )}
