@@ -114,12 +114,15 @@ router.post("/success", async (req, res) => {
       recordedBy: temp.user,
     });
 
-    // Only create join request if payment is valid and saved
-    // await JoinRequest.create({
-    //   clubId: temp.club,
-    //   userId: temp.user,
-    //   status: "pending",
-    // });
+    // Only create join request if payment is valid and not already present
+    const existingRequest = await JoinRequest.findOne({ clubId: temp.club, userId: temp.user });
+    if (!existingRequest) {
+      await JoinRequest.create({
+        clubId: temp.club,
+        userId: temp.user,
+        status: "pending",
+      });
+    }
 
     // Remove temp transaction
     await TempTransaction.deleteOne({ tran_id });

@@ -13,27 +13,15 @@ const PaymentSuccessPage = () => {
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const clubId = query.get('clubId');
-    // Optionally, you can use tran_id for verification
-    // const tran_id = query.get('tran_id');
     if (!clubId) {
       setError('Missing club information.');
       setLoading(false);
       return;
     }
-    // Send join request after payment
-    const sendJoinRequest = async () => {
-      try {
-        await api.post(`/clubs/${clubId}/join`);
-        setSuccess(true);
-        toast.success('Payment successful! Join request sent.');
-        setTimeout(() => navigate(`/clubs/${clubId}`), 2000);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Failed to send join request after payment.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    sendJoinRequest();
+    setSuccess(true);
+    toast.success('Payment successful! Join request sent.');
+    setTimeout(() => navigate(`/clubs/${clubId}`), 2000);
+    setLoading(false);
     // eslint-disable-next-line
   }, []);
 

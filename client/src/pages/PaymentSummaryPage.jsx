@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -55,7 +56,7 @@ const PaymentSummaryPage = () => {
           </div>
           <div className="flex justify-between border-b pb-2">
             <span className="text-gray-600 font-medium">Amount</span>
-            <span className="text-gray-900 font-bold text-lg">৳ 100 BDT</span>
+            <span className="text-gray-900 font-bold text-lg">100 BDT</span>
           </div>
         </div>
 
