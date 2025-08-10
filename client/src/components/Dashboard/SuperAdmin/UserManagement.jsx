@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api from '../../../services/api';
 const API_BASE = '/api/users';
 
 const UserManagement = () => {

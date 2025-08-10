@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
-import SuperAdminDashboard from '../components/Dashboard/SuperAdminDashboard';
-import AdminDashboard from '../components/Dashboard/AdminDashboard';
-import MemberDashboard from '../components/Dashboard/MemberDashboard';
+import SuperAdminDashboard from '../components/Dashboard/SuperAdmin/SuperAdminDashboard';
+import AdminDashboard from '../components/Dashboard/Admin/AdminDashboard';
+import MemberDashboard from '../components/Dashboard/Member/MemberDashboard';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 
 const DashboardPage = () => {

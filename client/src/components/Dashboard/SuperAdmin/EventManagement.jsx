@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import api from '../../services/api';
+import api from '../../../services/api';
 import ClubTaskAssignment from './ClubTaskAssignment';
 
 const EventManagement = () => {

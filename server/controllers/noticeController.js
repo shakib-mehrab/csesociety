@@ -108,8 +108,8 @@ const deleteNotice = asyncHandler(async (req, res) => {
             throw new Error('Not authorized to delete this notice');
         }
     }
-    await notice.remove();
-    res.json({ message: 'Notice removed' });
+  await Notice.deleteOne({ _id: notice._id });
+  res.json({ message: 'Notice removed' });
   } else {
     res.status(404);
     throw new Error('Notice not found');

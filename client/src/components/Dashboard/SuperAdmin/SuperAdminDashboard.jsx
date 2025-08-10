@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   User,
   Users,
@@ -41,13 +41,19 @@ const features = [
   { key: 'finance', label: 'Financial Management', icon: DollarSign },
   { key: 'content', label: 'Content Management', icon: FileText },
   { key: 'event', label: 'Event Management', icon: Calendar },
-  { key: 'eventRegistrations', label: 'Event Registration Review', icon: ClipboardCheck },
-  { key: 'scholarship', label: 'Scholarship Management', icon: DollarSign },
+  { key: 'eventRegistrations', label: 'Registration Review', icon: ClipboardCheck },
+  { key: 'scholarship', label: 'Manage Scholarship', icon: DollarSign },
   { key: 'report', label: 'Reporting & Analytics', icon: BarChart2 },
 ];
 
 const SuperAdminDashboard = () => {
-  const [activeFeature, setActiveFeature] = useState('user');
+  const [activeFeature, setActiveFeature] = useState(() => {
+    return localStorage.getItem('superadmin_active_feature') || 'user';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('superadmin_active_feature', activeFeature);
+  }, [activeFeature]);
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-tr from-indigo-50 via-white to-indigo-100 font-sans text-gray-800">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllPayments } from '../../services/paymentService';
+import { getAllPayments } from '../../../services/paymentService';
 
 const statusColors = {
   paid: 'bg-green-100 text-green-800',

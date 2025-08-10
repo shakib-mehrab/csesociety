@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FaRegCalendarAlt } from 'react-icons/fa';
-import api from '../../services/api';
+import api from '../../../services/api';
 
 const ClubTaskAssignment = ({ clubs }) => {
   const [tasks, setTasks] = useState([]);

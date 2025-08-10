@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import api from "../../services/api";
+import api from "../../../services/api";
 
 const EventRegistrationReview = () => {
   const [events, setEvents] = useState([]);
