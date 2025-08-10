@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
@@ -9,14 +9,15 @@ const ClubCard = ({ club }) => {
   const { user } = useAuth();
   const [joining, setJoining] = useState(false);
   const [joined, setJoined] = useState(false);
+  const navigate = useNavigate();
 
   const handleJoin = () => {
     if (!user) {
       toast.error('Please sign in to join a club');
       return;
     }
-    // Redirect to payment page with clubId as query param
-    window.location.href = `/payment?clubId=${club._id}`;
+    // Navigate to payment summary page with clubId and clubName
+    navigate(`/payment-summary?clubId=${club._id}&clubName=${encodeURIComponent(club.name)}`);
   };
 
   return (

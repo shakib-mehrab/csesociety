@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 const ClubDetailsPage = () => {
   const { id } = useParams();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [club, setClub] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -41,13 +42,13 @@ const ClubDetailsPage = () => {
 
 
   // Join club handler
-  const handleJoinClub = async () => {
+  const handleJoinClub = () => {
     if (!user) {
       toast.error('Please sign in to join a club');
       return;
     }
-    // Redirect to payment page with clubId as query param
-    window.location.href = `/payment?clubId=${club._id}`;
+    // Navigate to payment summary page with clubId and clubName
+    navigate(`/payment-summary?clubId=${club._id}&clubName=${encodeURIComponent(club.name)}`);
   };
 
   return (
