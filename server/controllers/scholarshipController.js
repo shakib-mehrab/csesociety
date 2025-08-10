@@ -1,6 +1,8 @@
 const Scholarship = require('../models/Scholarship');
 const ScholarshipApplication = require('../models/ScholarshipApplication');
 const User = require('../models/User');
+const cloudinary = require('../utils/cloudinary');
+const fs = require('fs');
 
 // Create a new scholarship
 exports.createScholarship = async (req, res) => {
@@ -45,11 +47,22 @@ exports.deleteScholarship = async (req, res) => {
 };
 
 // Create a scholarship application
+
+
 exports.applyScholarship = async (req, res) => {
   try {
     const data = req.body;
     data.user = req.user._id;
-    if (req.file) data.photo = req.file.path;
+    // Handle image upload to Cloudinary
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'scholarship_photos',
+        resource_type: 'image',
+      });
+      data.photo = result.secure_url;
+      // Remove local file after upload
+      fs.unlink(req.file.path, () => {});
+    }
     const exists = await ScholarshipApplication.findOne({ user: req.user._id, scholarship: data.scholarship });
     if (exists) return res.status(400).json({ error: 'Already applied' });
     const app = await ScholarshipApplication.create(data);

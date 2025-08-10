@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { PlusCircle, X, Loader2 } from 'lucide-react';
@@ -238,7 +239,8 @@ const ScholarshipManagement = () => {
                   <td className="py-3 px-4 text-gray-500">{a.createdAt?.slice(0, 10)}</td>
                   <td className="py-3 px-4">
                     {a.status === 'pending' && (
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-1 md:flex-row md:gap-2">
+                        <button className="bg-blue-500 text-white px-2 py-1 rounded mb-1 md:mb-0" onClick={() => setSelected('view-' + a._id)}>View Application</button>
                         <button
                           className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg"
                           onClick={() => handleReview(a._id, 'approved')}
@@ -260,6 +262,52 @@ const ScholarshipManagement = () => {
           </table>
         </div>
       </div>
+
+      {/* Application View Modal */}
+      {selected && selected.startsWith('view-') && (() => {
+        const appId = selected.replace('view-', '');
+        const app = applications.find(a => a._id === appId);
+        if (!app) return null;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20 backdrop-blur-md">
+            <div className="bg-white rounded-lg shadow-lg max-w-2xl w-full p-6 relative max-h-[90vh] overflow-y-auto">
+              <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl font-bold" onClick={() => setSelected(null)}>&times;</button>
+              <h4 className="text-xl font-bold mb-2 text-indigo-700">Scholarship Application Details</h4>
+              <div className="mb-4 flex gap-4 items-center">
+                {app.photo && (
+                  <img src={app.photo} alt="Applicant" className="w-24 h-24 object-cover rounded border" />
+                )}
+                <div>
+                  <div className="font-semibold">{app.user?.name}</div>
+                  <div className="text-sm text-gray-500">{app.user?.email}</div>
+                  <div className="text-sm text-gray-500">{app.user?.studentId}</div>
+                </div>
+              </div>
+              <div className="mb-2"><span className="font-semibold">Scholarship:</span> {app.scholarship?.name}</div>
+              <div className="mb-2"><span className="font-semibold">Status:</span> {statusBadge(app.status)}</div>
+              <div className="mb-2"><span className="font-semibold">Applied On:</span> {app.createdAt?.slice(0,10)}</div>
+              <hr className="my-3" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div><span className="font-semibold">Mother's Name:</span> {app.motherName}</div>
+                <div><span className="font-semibold">Father's Name:</span> {app.fatherName}</div>
+                <div><span className="font-semibold">Institution:</span> {app.institution}</div>
+                <div><span className="font-semibold">Batch:</span> {app.batch}</div>
+                <div><span className="font-semibold">Semester:</span> {app.semester}</div>
+                <div><span className="font-semibold">Session:</span> {app.session}</div>
+                <div><span className="font-semibold">Roll/ID:</span> {app.roll}</div>
+                <div><span className="font-semibold">SSC Grade:</span> {app.sscGrade}</div>
+                <div><span className="font-semibold">HSC Grade:</span> {app.hscGrade}</div>
+                <div><span className="font-semibold">Semester Grades:</span> {app.semesterGrades}</div>
+                <div className="md:col-span-2"><span className="font-semibold">Permanent Address:</span> {app.permanentAddress?.village}, {app.permanentAddress?.postOffice}, {app.permanentAddress?.upozilla}, {app.permanentAddress?.district}</div>
+                <div className="md:col-span-2"><span className="font-semibold">Present Address:</span> {app.presentAddress}</div>
+                <div className="md:col-span-2"><span className="font-semibold">Family Able to Take Expense:</span> {app.familyExpense ? 'Yes' : 'No'}</div>
+                <div className="md:col-span-2"><span className="font-semibold">Family Economic Condition:</span> {app.familyCondition}</div>
+                <div className="md:col-span-2"><span className="font-semibold">Reference:</span> {app.reference}</div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Modal */}
       {selected && (() => {
