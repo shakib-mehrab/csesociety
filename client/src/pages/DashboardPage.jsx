@@ -24,6 +24,10 @@ const DashboardPage = () => {
     }
   };
 
+  // Remove container/margin for super_admin dashboard
+  if (user?.role === 'super_admin') {
+    return renderDashboard();
+  }
   return (
     <div className="container mx-auto mt-10">
       {renderDashboard()}

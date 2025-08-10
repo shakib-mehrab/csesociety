@@ -75,15 +75,28 @@ const SuperAdminDashboard = () => {
     >
       {/* Header */}
       <header
-        className="flex-shrink-0 py-6 px-6 bg-transparent flex items-center justify-between"
-        style={{ color: colors.light }}
+        className="flex-shrink-0 px-4 pt-2 pb-0 bg-transparent flex items-center justify-center relative min-h-0"
+        style={{ color: colors.light, minHeight: 0, marginBottom: 0 }}
       >
-        <h1 className="text-3xl font-extrabold text-center ">
+        <h1
+          className="text-3xl md:text-4xl font-extrabold text-center m-0 p-0 w-full"
+          style={{
+            color: '#fff',
+            // textShadow: '0 0 12px #3b82f6, 0 0 32px #60a5fa, 0 0 2px #fff',
+            letterSpacing: '1px',
+            // filter: 'brightness(1.5) drop-shadow(0 0 8px #3b82f6)',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            margin: '0 auto',
+            zIndex: 10,
+          }}
+        >
           Super Admin Dashboard
         </h1>
         <button
           onClick={logout}
-          className="ml-auto bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition"
+          className="ml-auto bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition relative z-20"
           style={{ marginLeft: 'auto' }}
         >
           Logout
