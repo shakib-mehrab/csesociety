@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
@@ -103,11 +104,13 @@ const UserProfilePage = () => {
               setForm({
                 name: user?.name || '',
                 email: user?.email || '',
-                phone: user?.phone || '',
-                batch: user?.batch || '',
-                department: user?.department || '',
+                phone: user?.phone ?? '',
+                batch: user?.batch ?? '',
+                department: user?.department ?? '',
                 photo: user?.profilePicture || '',
               });
+              setPhotoPreview('');
+              setPhotoFile(null);
               setShowForm(true);
               setSuccess('');
               setError('');
@@ -120,7 +123,14 @@ const UserProfilePage = () => {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+        <form onSubmit={async (e) => {
+          await handleSubmit(e);
+          // After successful update, fetch latest profile info
+          try {
+            const res = await api.get('/auth/me');
+            setUser && setUser(res.data);
+          } catch {}
+        }} className="space-y-4 mt-6">
           <div className="relative flex flex-col items-center mb-4">
             <img
               src={photoPreview || form.photo || '/default-avatar.png'}

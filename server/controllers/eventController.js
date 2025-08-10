@@ -111,8 +111,8 @@ const deleteEvent = asyncHandler(async (req, res) => {
             throw new Error('Not authorized to delete this event');
         }
     }
-    await event.remove();
-    res.json({ message: 'Event removed' });
+  await Event.deleteOne({ _id: event._id });
+  res.json({ message: 'Event removed' });
   } else {
     res.status(404);
     throw new Error('Event not found');

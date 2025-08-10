@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import api from '../../services/api';
 import ClubTaskAssignment from './ClubTaskAssignment';
 
@@ -11,13 +13,13 @@ const EventManagement = () => {
   const [form, setForm] = useState({
     title: '',
     description: '',
-    date: '',
+    date: null,
     time: '',
     venue: '',
     type: 'society',
     clubId: '',
-    registrationDeadline: '',
-    fee: 0,
+    registrationDeadline: null,
+    fee: '',
     poster: ''
   });
   const [editId, setEditId] = useState(null);
@@ -38,17 +40,24 @@ const EventManagement = () => {
   }, [refresh]);
 
   const handleInput = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleDateChange = (date) => setForm(f => ({ ...f, date }));
+  const handleRegDeadlineChange = (date) => setForm(f => ({ ...f, registrationDeadline: date }));
 
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     try {
+      const payload = {
+        ...form,
+        date: form.date ? form.date.toISOString().slice(0, 10) : '',
+        registrationDeadline: form.registrationDeadline ? form.registrationDeadline.toISOString().slice(0, 10) : '',
+      };
       if (editId) {
-        await api.put(`/events/${editId}`, form);
+        await api.put(`/events/${editId}`, payload);
       } else {
-        await api.post('/events', form);
+        await api.post('/events', payload);
       }
-      setForm({ title: '', description: '', date: '', time: '', venue: '', type: 'society', clubId: '', registrationDeadline: '', fee: 0, poster: '' });
+      setForm({ title: '', description: '', date: null, time: '', venue: '', type: 'society', clubId: '', registrationDeadline: null, fee: '', poster: '' });
       setEditId(null);
       setRefresh(r => !r);
       setError('');
@@ -62,13 +71,13 @@ const EventManagement = () => {
   const handleEdit = e => setForm({
     title: e.title,
     description: e.description,
-    date: e.date?.slice(0, 10) || '',
+    date: e.date ? new Date(e.date) : null,
     time: e.time,
     venue: e.venue,
     type: e.type,
     clubId: e.clubId?._id || e.clubId || '',
-    registrationDeadline: e.registrationDeadline?.slice(0, 10) || '',
-    fee: e.fee || 0,
+    registrationDeadline: e.registrationDeadline ? new Date(e.registrationDeadline) : null,
+    fee: e.fee === 0 ? '' : e.fee || '',
     poster: e.poster || ''
   }) || setEditId(e._id);
 
@@ -118,12 +127,12 @@ const EventManagement = () => {
             required
           />
           <div className="grid grid-cols-2 gap-4 mb-3">
-            <input
-              type="date"
-              name="date"
-              value={form.date}
-              onChange={handleInput}
-              className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            <DatePicker
+              selected={form.date}
+              onChange={handleDateChange}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Event Date"
+              className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
               required
             />
             <input
@@ -169,19 +178,19 @@ const EventManagement = () => {
             </select>
           )}
           <div className="grid grid-cols-2 gap-4 mb-3">
-            <input
-              type="date"
-              name="registrationDeadline"
-              value={form.registrationDeadline}
-              onChange={handleInput}
-              className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            <DatePicker
+              selected={form.registrationDeadline}
+              onChange={handleRegDeadlineChange}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Registration Deadline"
+              className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
             <input
               type="number"
               name="fee"
               value={form.fee}
               onChange={handleInput}
-              placeholder="Fee"
+              placeholder="EventFee"
               className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
               min={0}
             />

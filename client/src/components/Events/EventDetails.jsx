@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import LoadingSpinner from '../Common/LoadingSpinner';
@@ -10,6 +11,7 @@ import { ArrowLeft, Calendar } from 'lucide-react';
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -28,11 +30,20 @@ const EventDetails = () => {
   }, [id]);
 
   const handleRegister = async () => {
+    if (event && user && event.registeredUsers && event.registeredUsers.includes(user._id)) {
+      toast.error('Already registered for the event');
+      return;
+    }
     try {
       await api.post(`/events/${id}/register`);
       toast.success('Registered for event!');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to register for event');
+      const msg = error.response?.data?.message || 'Failed to register for event';
+      if (msg.toLowerCase().includes('already registered')) {
+        toast.error('Already registered for the event');
+      } else {
+        toast.error(msg);
+      }
     }
   };
 

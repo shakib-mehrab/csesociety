@@ -48,7 +48,7 @@ const deleteTask = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('Task not found');
   }
-  await task.remove();
+  await ClubTask.deleteOne({ _id: task._id });
   res.json({ message: 'Task removed' });
 });
 
