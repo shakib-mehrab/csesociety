@@ -3,12 +3,14 @@
 import React from 'react';
 import { FaUsers, FaUserCheck, FaBullhorn, FaStickyNote, FaCalendarAlt, FaClipboardList, FaBars, FaTimes } from 'react-icons/fa';
 
+
 import ClubJoinRequests from './ClubJoinRequests';
 import ClubMembers from './ClubMembers';
 import ClubNotices from './ClubNotices';
 import ClubEvents from './ClubEvents';
 import EventRegistrations from './EventRegistrations';
 import ClubAnnouncements from './ClubAnnouncements';
+import TaskSection from './TaskSection';
 
 const featureComponents = {
 	joinRequests: <ClubJoinRequests />,
@@ -17,6 +19,7 @@ const featureComponents = {
 	notices: <ClubNotices />,
 	events: <ClubEvents />,
 	registrations: <EventRegistrations />,
+	tasks: <TaskSection />,
 };
 
 const sidebarLinks = [
@@ -26,6 +29,7 @@ const sidebarLinks = [
 	{ key: 'notices', label: 'Notices', icon: <FaStickyNote size={18} /> },
 	{ key: 'events', label: 'Events', icon: <FaCalendarAlt size={18} /> },
 	{ key: 'registrations', label: 'Registrations', icon: <FaClipboardList size={18} /> },
+	{ key: 'tasks', label: 'Tasks', icon: <FaClipboardList size={18} /> },
 ];
 
 const AdminDashboard = () => {

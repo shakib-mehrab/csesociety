@@ -2,9 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../services/api';
+import { useAuth } from '../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 const ClubDetailsPage = () => {
   const { id } = useParams();
+  const { user } = useAuth();
   const [club, setClub] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -39,20 +42,12 @@ const ClubDetailsPage = () => {
 
   // Join club handler
   const handleJoinClub = async () => {
-    setJoinLoading(true);
-    setJoinError('');
-    setJoinSuccess('');
-    try {
-      const res = await api.post(`/clubs/${id}/join`);
-      setJoinSuccess('Join request sent!');
-      setHasJoined(true);
-    } catch (err) {
-      setJoinError(
-        err?.response?.data?.message || 'Failed to join club. Please try again.'
-      );
-    } finally {
-      setJoinLoading(false);
+    if (!user) {
+      toast.error('Please sign in to join a club');
+      return;
     }
+    // Redirect to payment page with clubId as query param
+    window.location.href = `/payment?clubId=${club._id}`;
   };
 
   return (
@@ -87,7 +82,7 @@ const ClubDetailsPage = () => {
                 </button>
               ) : (
                 <button
-                  className="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-60"
+                  className="px-6 py-2 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-60"
                   onClick={handleJoinClub}
                   disabled={joinLoading}
                 >

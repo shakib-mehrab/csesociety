@@ -41,12 +41,12 @@ const ClubCard = ({ club }) => {
         <div className="flex gap-2 mt-auto">
           <Link
             to={`/clubs/${club._id}`}
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-center"
+            className="flex-1 px-4 py-2 bg-cyan-600 text-white rounded-md hover:bg-blue-700 transition-colors text-center"
           >
             View Details
           </Link>
           <button
-            className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-center disabled:opacity-60"
+            className="flex-1 px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-green-700 transition-colors text-center disabled:opacity-60"
             onClick={handleJoin}
             disabled={joining || joined}
           >
