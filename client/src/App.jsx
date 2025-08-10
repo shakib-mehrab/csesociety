@@ -20,10 +20,13 @@ import SignUp from './components/Auth/SignUp';
 import NotFoundPage from './pages/NotFoundPage';
 import ProtectedRoute from './components/Common/ProtectedRoute';
 
+import { useAuth } from './hooks/useAuth';
 function App() {
+  const { user } = useAuth();
+  const isSuperAdminDashboard = window.location.pathname.startsWith('/dashboard') && user?.role === 'super_admin';
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
+      {!isSuperAdminDashboard && <Navbar />}
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -36,21 +39,17 @@ function App() {
           <Route path="/notices" element={<NoticesPage />} />
           <Route path="/notices/:id" element={<NoticeDetails />} />
           <Route path="/scholarships" element={<ScholarshipPage />} />
-          
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
-
-
           {/* Payment for club join (public, not protected) */}
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/payment-summary" element={<PaymentSummaryPage />} />
           <Route path="/payment/success" element={<PaymentSuccessPage />} />
           <Route path="/payments" element={<ProtectedRoute roles={['super_admin']}><PaymentPage /></ProtectedRoute>} />
-
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      <Footer />
+      {!isSuperAdminDashboard && <Footer />}
     </div>
   );
 }

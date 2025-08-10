@@ -1,12 +1,13 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllPayments } from '../../../services/paymentService';
 
 const statusColors = {
-  paid: 'bg-green-100 text-green-800',
-  completed: 'bg-green-100 text-green-800',
-  pending: 'bg-yellow-100 text-yellow-800',
-  failed: 'bg-red-100 text-red-800',
+  paid: 'bg-[#26cc00] text-white',
+  completed: 'bg-[#409fc8] text-white',
+  pending: 'bg-[#034986] text-white',
+  failed: 'bg-[#00183a] text-white',
 };
 
 const FinancialManagement = () => {
@@ -32,34 +33,45 @@ const FinancialManagement = () => {
   return (
     <div className="min-h-screen w-full bg-gray-50 p-10 flex justify-center">
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-6xl relative">
-        <button
-          onClick={() => navigate('/dashboard')}
-          className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full text-3xl font-extrabold transition-shadow shadow-md"
-          aria-label="Close and return to dashboard"
-        >
-          &times;
-        </button>
+        
 
-        <h3 className="text-4xl font-extrabold mb-10 text-indigo-700">
-          💰 Financial Management
+        <h3 className="text-4xl font-extrabold mb-10" style={{ color: '#00183a' }}>
+          Financial Management
         </h3>
 
         {loading ? (
-          <p className="text-center text-indigo-600 font-semibold py-20">Loading transactions...</p>
+          <p className="text-center font-semibold py-20" style={{ color: '#034986' }}>
+            Loading transactions...
+          </p>
         ) : error ? (
-          <p className="text-center text-red-600 font-semibold py-20">{error}</p>
+          <p className="text-center font-semibold py-20 text-red-600">{error}</p>
         ) : payments.length === 0 ? (
-          <p className="text-center text-gray-600 font-medium py-20">No transactions found.</p>
+          <p className="text-center font-medium py-20 text-gray-600">No transactions found.</p>
         ) : (
           <div className="overflow-x-auto rounded-lg shadow-lg border border-gray-200">
             <table className="min-w-full table-auto text-gray-700">
-              <thead className="bg-indigo-100 text-indigo-900 font-semibold select-none">
+              <thead
+                className="font-semibold select-none"
+                style={{ backgroundColor: '#409fc8', color: 'white' }}
+              >
                 <tr>
-                  <th className="px-8 py-4 text-left rounded-tl-lg">User</th>
-                  <th className="px-6 py-4 text-left">Amount</th>
-                  <th className="px-6 py-4 text-left">Status</th>
-                  <th className="px-6 py-4 text-left">Date</th>
-                  <th className="px-6 py-4 text-left rounded-tr-lg text-xs text-gray-500 tracking-wide">
+                  <th className="px-8 py-4 text-left rounded-tl-lg" scope="col">
+                    User
+                  </th>
+                  <th className="px-6 py-4 text-left" scope="col">
+                    Amount
+                  </th>
+                  <th className="px-6 py-4 text-left" scope="col">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-left" scope="col">
+                    Date
+                  </th>
+                  <th
+                    className="px-6 py-4 text-left rounded-tr-lg text-xs tracking-wide font-mono"
+                    scope="col"
+                    style={{ color: '#002a54' }}
+                  >
                     Transaction ID
                   </th>
                 </tr>
@@ -69,15 +81,18 @@ const FinancialManagement = () => {
                   <tr
                     key={payment._id}
                     className={`transition-colors ${
-                      idx % 2 === 0 ? 'bg-white' : 'bg-indigo-50'
-                    } hover:bg-indigo-100 cursor-default`}
+                      idx % 2 === 0 ? 'bg-white' : 'bg-[#e5f1fb]'
+                    } hover:bg-[#c3defd] cursor-default`}
                   >
-                    <td className="px-8 py-5 whitespace-nowrap">
+                    <td className="px-8 py-5 whitespace-nowrap" style={{ color: '#00183a' }}>
                       {payment.userId && typeof payment.userId === 'object'
                         ? `${payment.userId.name} (${payment.userId.email})`
                         : payment.userId}
                     </td>
-                    <td className="px-6 py-5 font-semibold text-indigo-900 whitespace-nowrap">
+                    <td
+                      className="px-6 py-5 font-semibold whitespace-nowrap"
+                      style={{ color: '#034986' }}
+                    >
                       BDT {payment.amount.toFixed(2)}
                     </td>
                     <td className="px-6 py-5">
@@ -89,11 +104,15 @@ const FinancialManagement = () => {
                         {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
                       </span>
                     </td>
-                    <td className="px-6 py-5 text-sm text-gray-600 whitespace-nowrap">
+                    <td className="px-6 py-5 text-sm whitespace-nowrap" style={{ color: '#002a54' }}>
                       {new Date(payment.paymentDate).toLocaleString()}
                     </td>
-                    <td className="px-6 py-5 text-xs text-gray-400 font-mono truncate max-w-[150px] whitespace-nowrap">
-                      {payment.transactionId}
+                    <td
+                      className="px-6 py-5 text-xs font-mono truncate whitespace-nowrap"
+                      style={{ color: '#409fc8' }}
+                      title={payment.transactionId}
+                    >
+                      {payment.transactionId.slice(0, 15) + '...'}
                     </td>
                   </tr>
                 ))}

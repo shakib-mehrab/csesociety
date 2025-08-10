@@ -88,7 +88,7 @@ const ScholarshipManagement = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
-          🎓 Scholarship Management
+        Scholarships & Application
         </h2>
         <button
           onClick={() => setShowForm(f => !f)}

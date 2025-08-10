@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../../services/api';
 import { useAuth } from '../../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import {
   Users, Bell, Calendar, ClipboardList, BookMarked, AlertCircle
 } from 'lucide-react';
@@ -19,9 +20,15 @@ const Section = ({ icon: Icon, title, children, color }) => (
   </div>
 );
 
-// Reusable List Item
-const ListItem = ({ title, content, extra }) => (
-  <li className="py-3 border-b border-gray-100 last:border-none hover:bg-gray-50 px-3 rounded-lg transition-colors">
+// Reusable List Item (optionally clickable)
+const ListItem = ({ title, content, extra, onClick }) => (
+  <li
+    className={`py-3 border-b border-gray-100 last:border-none px-3 rounded-lg transition-colors ${onClick ? 'hover:bg-blue-50 cursor-pointer' : 'hover:bg-gray-50'}`}
+    onClick={onClick}
+    tabIndex={onClick ? 0 : undefined}
+    onKeyDown={onClick ? (e) => { if (e.key === 'Enter') onClick(); } : undefined}
+    role={onClick ? 'button' : undefined}
+  >
     <p className="font-medium text-gray-900">{title}</p>
     {content && <p className="text-gray-600 text-sm mt-0.5">{content}</p>}
     {extra && <p className="text-sm text-gray-500 mt-1">{extra}</p>}
@@ -30,6 +37,7 @@ const ListItem = ({ title, content, extra }) => (
 
 const MemberDashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [clubs, setClubs] = useState([]);
   const [clubNotices, setClubNotices] = useState([]);
   const [clubEvents, setClubEvents] = useState([]);
@@ -95,6 +103,7 @@ const MemberDashboard = () => {
           )}
         </Section>
 
+
         <Section title="Club Notices" icon={Bell} color="bg-green-500">
           {clubNotices.length === 0 ? (
             <div className="text-gray-500 text-sm">No club notices.</div>
@@ -105,11 +114,13 @@ const MemberDashboard = () => {
                   key={n._id}
                   title={n.title}
                   content={`${n.content?.slice(0, 60)}${n.content?.length > 60 ? '...' : ''}`}
+                  onClick={() => navigate(`/notices/${n._id}`)}
                 />
               ))}
             </ul>
           )}
         </Section>
+
 
         <Section title="Club Events" icon={Calendar} color="bg-purple-500">
           {clubEvents.length === 0 ? (
@@ -121,6 +132,7 @@ const MemberDashboard = () => {
                   key={e._id}
                   title={e.title}
                   extra={`${e.date?.slice(0, 10) || '-'} | ${e.venue}`}
+                  onClick={() => navigate(`/events/${e._id}`)}
                 />
               ))}
             </ul>
@@ -143,6 +155,7 @@ const MemberDashboard = () => {
           )}
         </Section>
 
+
         <Section title="Other Events" icon={Calendar} color="bg-yellow-500">
           {otherEvents.length === 0 ? (
             <div className="text-gray-500 text-sm">No other events.</div>
@@ -153,6 +166,7 @@ const MemberDashboard = () => {
                   key={e._id}
                   title={e.title}
                   extra={`${e.date?.slice(0, 10) || '-'} | ${e.venue} (${e.type === 'society' ? 'Society' : 'Club'})`}
+                  onClick={() => navigate(`/events/${e._id}`)}
                 />
               ))}
             </ul>

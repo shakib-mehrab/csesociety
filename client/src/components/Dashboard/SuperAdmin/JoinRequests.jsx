@@ -1,5 +1,13 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import api from '../../../services/api';
+
+const colors = {
+  darkest: '#00183a',
+  dark: '#002a54',
+  medium: '#034986',
+  light: '#409fc8',
+};
 
 const JoinRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -41,36 +49,81 @@ const JoinRequests = () => {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-gray-50 min-h-[60vh] rounded-lg shadow-md">
-      <h3 className="text-2xl font-extrabold mb-6 text-indigo-700 border-b pb-3">
+    <div
+      className="p-6 max-w-5xl mx-auto bg-gray-50 min-h-[60vh] rounded-lg shadow-md"
+      style={{ border: `1px solid ${colors.medium}` }}
+    >
+      <h3
+        className="text-2xl font-extrabold mb-6 border-b pb-3"
+        style={{ color: colors.darkest }}
+      >
         Club Join Requests
       </h3>
 
       {error && (
-        <div className="mb-5 p-3 bg-red-100 text-red-700 rounded shadow-sm">
+        <div
+          className="mb-5 p-3 rounded shadow-sm"
+          style={{ backgroundColor: '#fddede', color: '#9b2226' }}
+        >
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-16 text-indigo-600 font-semibold">
+        <div
+          className="text-center py-16 font-semibold"
+          style={{ color: colors.medium }}
+        >
           Loading join requests...
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
-          <table className="min-w-full text-gray-700 text-sm border-collapse">
-            <thead className="bg-indigo-100 text-indigo-900 font-semibold select-none">
+        <div
+          className="overflow-x-auto rounded-lg shadow-lg bg-white"
+          style={{ border: `1px solid ${colors.medium}` }}
+        >
+          <table
+            className="min-w-full text-sm border-collapse"
+            style={{ color: colors.darkest }}
+          >
+            <thead
+              className="font-semibold select-none"
+              style={{ backgroundColor: colors.light, color: '#fff' }}
+            >
               <tr>
-                <th className="p-4 border border-indigo-200 text-left rounded-tl-lg">User</th>
-                <th className="p-4 border border-indigo-200 text-left">Student ID</th>
-                <th className="p-4 border border-indigo-200 text-left">Club</th>
-                <th className="p-4 border border-indigo-200 text-left rounded-tr-lg">Actions</th>
+                <th
+                  className="p-4 border text-left"
+                  style={{ borderColor: colors.medium, borderTopLeftRadius: 12 }}
+                >
+                  User
+                </th>
+                <th
+                  className="p-4 border text-left"
+                  style={{ borderColor: colors.medium }}
+                >
+                  Student ID
+                </th>
+                <th
+                  className="p-4 border text-left"
+                  style={{ borderColor: colors.medium }}
+                >
+                  Club
+                </th>
+                <th
+                  className="p-4 border text-left"
+                  style={{ borderColor: colors.medium, borderTopRightRadius: 12 }}
+                >
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {requests.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="p-6 text-center text-gray-500 font-medium">
+                  <td
+                    colSpan="4"
+                    className="p-6 text-center font-medium"
+                    style={{ color: colors.medium }}
+                  >
                     No join requests available.
                   </td>
                 </tr>
@@ -79,24 +132,50 @@ const JoinRequests = () => {
                   <tr
                     key={req._id}
                     className="hover:bg-indigo-50 transition cursor-default"
+                    style={{ borderBottom: `1px solid ${colors.light}` }}
                   >
-                    <td className="p-4 border border-indigo-200">
-                      {req.userId?.name} <span className="text-gray-500 text-xs">({req.userId?.email})</span>
+                    <td className="p-4 border" style={{ borderColor: colors.medium }}>
+                      {req.userId?.name}{' '}
+                      <span
+                        className="text-xs"
+                        style={{ color: '#666' }}
+                      >
+                        ({req.userId?.email})
+                      </span>
                     </td>
-                    <td className="p-4 border border-indigo-200">{req.userId?.studentId}</td>
-                    <td className="p-4 border border-indigo-200">{req.clubId?.name}</td>
-                    <td className="p-4 border border-indigo-200 space-x-3">
+                    <td className="p-4 border" style={{ borderColor: colors.medium }}>
+                      {req.userId?.studentId}
+                    </td>
+                    <td className="p-4 border" style={{ borderColor: colors.medium }}>
+                      {req.clubId?.name}
+                    </td>
+                    <td
+                      className="p-4 space-x-3"
+                      style={{ borderColor: colors.medium }}
+                    >
                       <button
                         onClick={() => handleApprove(req._id)}
-                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded-lg shadow transition"
+                        className="px-4 py-1 rounded-lg shadow transition font-semibold"
                         aria-label={`Approve join request from ${req.userId?.name}`}
+                        style={{
+                          backgroundColor: colors.medium,
+                          color: '#fff',
+                        }}
+                        onMouseOver={e => (e.currentTarget.style.backgroundColor = colors.dark)}
+                        onMouseOut={e => (e.currentTarget.style.backgroundColor = colors.medium)}
                       >
                         Approve
                       </button>
                       <button
                         onClick={() => handleReject(req._id)}
-                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded-lg shadow transition"
+                        className="px-4 py-1 rounded-lg shadow transition font-semibold"
                         aria-label={`Reject join request from ${req.userId?.name}`}
+                        style={{
+                          backgroundColor: '#9b2226',
+                          color: '#fff',
+                        }}
+                        onMouseOver={e => (e.currentTarget.style.backgroundColor = '#7a1a1d')}
+                        onMouseOut={e => (e.currentTarget.style.backgroundColor = '#9b2226')}
                       >
                         Reject
                       </button>

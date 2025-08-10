@@ -3,6 +3,13 @@ import React, { useState, useEffect } from 'react';
 import api from '../../../services/api';
 const API_BASE = '/api/users';
 
+const colors = {
+  darkest: '#00183a',
+  dark: '#002a54',
+  medium: '#034986',
+  light: '#409fc8',
+};
+
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -12,6 +19,7 @@ const UserManagement = () => {
   const [refresh, setRefresh] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState(null);
   const [deleting, setDeleting] = useState(false);
+
   // Delete user handler
   const handleDeleteUser = async () => {
     if (!deleteUserId) return;
@@ -86,115 +94,131 @@ const UserManagement = () => {
 
   return (
     <div className="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
-      <h3 className="text-3xl font-extrabold mb-8 text-indigo-700 border-b pb-3">
-        👥 User Management
+      <h3
+        className="text-3xl font-extrabold mb-8 border-b pb-3"
+        style={{ color: colors.darkest }}
+      >
+         User Management
       </h3>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-100 text-red-700 rounded shadow-sm">
+        <div
+          className="mb-6 p-4 rounded shadow-sm"
+          style={{ backgroundColor: '#fddede', color: '#9b2226' }}
+        >
           {error}
         </div>
       )}
 
       {loading ? (
-        <div className="text-center text-indigo-600 font-semibold py-16">
+        <div
+          className="text-center font-semibold py-16"
+          style={{ color: colors.medium }}
+        >
           Loading users...
         </div>
       ) : (
         <>
           {/* Users Table */}
-          <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
-            <table className="min-w-full text-sm text-gray-700 border-collapse">
-              <thead className="bg-indigo-100 text-indigo-900 font-semibold select-none">
+          <div
+            className="overflow-x-auto rounded-lg shadow-lg bg-white"
+            style={{ border: `1px solid ${colors.medium}` }}
+          >
+            <table className="min-w-full text-sm border-collapse" style={{ color: colors.darkest }}>
+              <thead
+                className="font-semibold select-none"
+                style={{ backgroundColor: colors.light, color: '#fff' }}
+              >
                 <tr>
-                  <th className="p-4 border-b border-indigo-200 text-left rounded-tl-lg">
+                  <th className="p-4 border-b" style={{ borderColor: colors.medium, textAlign: 'left', borderTopLeftRadius: 12 }}>
                     Name
                   </th>
-                  <th className="p-4 border-b border-indigo-200 text-left">Email</th>
-                  <th className="p-4 border-b border-indigo-200 text-left">Role</th>
-                  <th className="p-4 border-b border-indigo-200 text-left">Clubs Joined</th>
-                  <th className="p-4 border-b border-indigo-200 rounded-tr-lg text-left">
+                  <th className="p-4 border-b" style={{ borderColor: colors.medium, textAlign: 'left' }}>
+                    Email
+                  </th>
+                  <th className="p-4 border-b" style={{ borderColor: colors.medium, textAlign: 'left' }}>
+                    Role
+                  </th>
+                  <th className="p-4 border-b" style={{ borderColor: colors.medium, textAlign: 'left' }}>
+                    Clubs Joined
+                  </th>
+                  <th className="p-4 border-b" style={{ borderColor: colors.medium, borderTopRightRadius: 12, textAlign: 'left' }}>
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {currentUsers.length === 0 && (
+                {currentUsers.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="p-6 text-center text-gray-500">
+                    <td
+                      colSpan="5"
+                      className="p-6 text-center"
+                      style={{ color: colors.medium }}
+                    >
                       No users found.
                     </td>
                   </tr>
+                ) : (
+                  currentUsers.map(user => (
+                    <tr
+                      key={user._id}
+                      className="hover:bg-indigo-50 transition cursor-default"
+                      style={{ borderBottom: `1px solid ${colors.light}` }}
+                    >
+                      <td className="p-4" style={{ borderColor: colors.medium }}>
+                        {user.name}
+                      </td>
+                      <td className="p-4" style={{ borderColor: colors.medium }}>
+                        {user.email}
+                      </td>
+                      <td
+                        className="p-4 capitalize"
+                        style={{ borderColor: colors.medium, color: colors.dark }}
+                      >
+                        {user.role}
+                      </td>
+                      <td className="p-4" style={{ borderColor: colors.medium }}>
+                        {user.clubsJoined && user.clubsJoined.length > 0 ? (
+                          <ul className="list-disc pl-4" style={{ color: colors.darkest }}>
+                            {user.clubsJoined.map(club => (
+                              <li key={club._id || club}>{club.name || club}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span style={{ color: '#999' }}>None</span>
+                        )}
+                      </td>
+                      <td className="p-4 flex gap-2" style={{ borderColor: colors.medium }}>
+                        <button
+                          className="px-4 py-1 rounded-lg shadow transition font-semibold"
+                          onClick={() => handleRoleChange(user)}
+                          aria-label={`Change role for ${user.name}`}
+                          style={{
+                            backgroundColor: colors.light,
+                            color: '#fff',
+                          }}
+                          onMouseOver={e => e.currentTarget.style.backgroundColor = colors.medium}
+                          onMouseOut={e => e.currentTarget.style.backgroundColor = colors.light}
+                        >
+                          Change Role
+                        </button>
+                        <button
+                          className="px-4 py-1 rounded-lg shadow transition font-semibold"
+                          onClick={() => setDeleteUserId(user._id)}
+                          aria-label={`Delete user ${user.name}`}
+                          style={{
+                            backgroundColor: '#9b2226',
+                            color: '#fff',
+                          }}
+                          onMouseOver={e => e.currentTarget.style.backgroundColor = '#7a1a1d'}
+                          onMouseOut={e => e.currentTarget.style.backgroundColor = '#9b2226'}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                 )}
-                {currentUsers.map(user => (
-                  <tr
-                    key={user._id}
-                    className="hover:bg-indigo-50 transition cursor-default"
-                  >
-                    <td className="p-4 border-b border-indigo-200">{user.name}</td>
-                    <td className="p-4 border-b border-indigo-200">{user.email}</td>
-                    <td className="p-4 border-b border-indigo-200 capitalize">{user.role}</td>
-                    <td className="p-4 border-b border-indigo-200">
-                      {user.clubsJoined && user.clubsJoined.length > 0 ? (
-                        <ul className="list-disc pl-4">
-                          {user.clubsJoined.map(club => (
-                            <li key={club._id || club}>{club.name || club}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <span className="text-gray-400">None</span>
-                      )}
-                    </td>
-                    <td className="p-4 border-b border-indigo-200 flex gap-2">
-                      <button
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1 rounded-lg shadow transition"
-                        onClick={() => handleRoleChange(user)}
-                        aria-label={`Change role for ${user.name}`}
-                      >
-                        Change Role
-                      </button>
-                      <button
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-lg shadow transition"
-                        onClick={() => setDeleteUserId(user._id)}
-                        aria-label={`Delete user ${user.name}`}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-      {/* Delete Confirmation Modal */}
-      {deleteUserId && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-5" role="dialog" aria-modal="true">
-          <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full relative animate-fadeIn">
-            <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-red-600 text-3xl font-bold focus:outline-none"
-              onClick={() => setDeleteUserId(null)}
-              aria-label="Close delete modal"
-            >
-              &times;
-            </button>
-            <h4 className="text-2xl font-extrabold mb-6 text-red-700">Confirm Deletion</h4>
-            <p className="mb-6">Are you sure you want to delete this user? This action cannot be undone.</p>
-            <div className="flex gap-4">
-              <button
-                className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 rounded-full font-semibold shadow transition"
-                onClick={() => setDeleteUserId(null)}
-                disabled={deleting}
-              >
-                Cancel
-              </button>
-              <button
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-full font-semibold shadow transition"
-                onClick={handleDeleteUser}
-                disabled={deleting}
-              >
-                {deleting ? 'Deleting...' : 'Delete'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
               </tbody>
             </table>
           </div>
@@ -207,13 +231,17 @@ const UserManagement = () => {
               className={`px-5 py-2 rounded-lg font-semibold transition ${
                 currentPage === 1
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                  : 'hover:bg-blue-700'
               }`}
+              style={{
+                backgroundColor: currentPage === 1 ? '#ddd' : colors.medium,
+                color: currentPage === 1 ? '#999' : '#fff',
+              }}
               aria-label="Previous page"
             >
               Previous
             </button>
-            <span className="text-indigo-900 font-semibold">
+            <span style={{ color: colors.darkest, fontWeight: '600' }}>
               Page {currentPage} of {totalPages}
             </span>
             <button
@@ -222,8 +250,12 @@ const UserManagement = () => {
               className={`px-5 py-2 rounded-lg font-semibold transition ${
                 currentPage === totalPages
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                  : 'hover:bg-blue-700'
               }`}
+              style={{
+                backgroundColor: currentPage === totalPages ? '#ddd' : colors.medium,
+                color: currentPage === totalPages ? '#999' : '#fff',
+              }}
               aria-label="Next page"
             >
               Next
@@ -240,7 +272,10 @@ const UserManagement = () => {
           aria-modal="true"
           aria-labelledby="changeRoleTitle"
         >
-          <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full relative animate-fadeIn">
+          <div
+            className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full relative animate-fadeIn"
+            style={{ borderColor: colors.medium, borderWidth: 1 }}
+          >
             <button
               className="absolute top-4 right-4 text-gray-500 hover:text-red-600 text-3xl font-bold focus:outline-none"
               onClick={() => setSelectedUser(null)}
@@ -251,16 +286,20 @@ const UserManagement = () => {
 
             <h4
               id="changeRoleTitle"
-              className="text-2xl font-extrabold mb-6 text-indigo-700"
+              className="text-2xl font-extrabold mb-6"
+              style={{ color: colors.darkest }}
             >
               Change Role for{' '}
-              <span className="text-indigo-900">{selectedUser.name}</span>
+              <span style={{ color: colors.medium }}>{selectedUser.name}</span>
             </h4>
 
             <form onSubmit={handleRoleSubmit}>
               <select
-                className="w-full rounded-xl border border-gray-300 px-5 py-3 mb-6
-                  focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-sm"
+                className="w-full rounded-xl border px-5 py-3 mb-6 focus:outline-none focus:ring-2 transition shadow-sm"
+                style={{
+                  borderColor: colors.medium,
+                  color: colors.darkest,
+                }}
                 value={role}
                 onChange={e => setRole(e.target.value)}
                 aria-label="Select user role"
@@ -273,7 +312,13 @@ const UserManagement = () => {
               </select>
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-full font-semibold shadow-lg transition"
+                className="w-full py-3 rounded-full font-semibold shadow-lg transition"
+                style={{
+                  backgroundColor: colors.medium,
+                  color: '#fff',
+                }}
+                onMouseOver={e => e.currentTarget.style.backgroundColor = colors.dark}
+                onMouseOut={e => e.currentTarget.style.backgroundColor = colors.medium}
               >
                 Update Role
               </button>
@@ -284,98 +329,146 @@ const UserManagement = () => {
 
       {/* Club Join Requests Section */}
       <section className="mt-12">
-        <h4 className="text-2xl font-extrabold mb-6 text-indigo-700 border-b pb-2">
+        <h4
+          className="text-2xl font-extrabold mb-6 border-b pb-2"
+          style={{ color: colors.darkest }}
+        >
           Club Join Requests
         </h4>
-        <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
-          <table className="min-w-full text-sm text-gray-700 border-collapse">
-            <thead className="bg-indigo-100 text-indigo-900 font-semibold select-none">
+        <div
+          className="overflow-x-auto rounded-lg shadow-lg bg-white"
+          style={{ border: `1px solid ${colors.medium}` }}
+        >
+          <table className="min-w-full text-sm border-collapse" style={{ color: colors.darkest }}>
+            <thead
+              className="font-semibold select-none"
+              style={{ backgroundColor: colors.light, color: '#fff' }}
+            >
               <tr>
-                <th className="p-4 border-b border-indigo-200 text-left rounded-tl-lg">
+                <th
+                  className="p-4 border-b text-left"
+                  style={{ borderColor: colors.medium, borderTopLeftRadius: 12 }}
+                >
                   User
                 </th>
-                <th className="p-4 border-b border-indigo-200 text-left">
+                <th
+                  className="p-4 border-b text-left"
+                  style={{ borderColor: colors.medium }}
+                >
                   Student ID
                 </th>
-                <th className="p-4 border-b border-indigo-200 text-left">Club</th>
-                <th className="p-4 border-b border-indigo-200 text-left">Status</th>
-                <th className="p-4 border-b border-indigo-200 text-left rounded-tr-lg">
+                <th
+                  className="p-4 border-b text-left"
+                  style={{ borderColor: colors.medium }}
+                >
+                  Club
+                </th>
+                <th
+                  className="p-4 border-b text-left"
+                  style={{ borderColor: colors.medium }}
+                >
+                  Status
+                </th>
+                <th
+                  className="p-4 border-b text-left"
+                  style={{ borderColor: colors.medium, borderTopRightRadius: 12 }}
+                >
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody>
-              {joinRequests.length === 0 && (
+              {joinRequests.length === 0 ? (
                 <tr>
                   <td
                     colSpan="5"
-                    className="p-6 text-center text-gray-500 font-medium"
+                    className="p-6 text-center font-medium"
+                    style={{ color: colors.medium }}
                   >
                     No join requests.
                   </td>
                 </tr>
+              ) : (
+                joinRequests.map(req => (
+                  <tr
+                    key={req._id}
+                    className="hover:bg-indigo-50 transition cursor-default"
+                    style={{ borderBottom: `1px solid ${colors.light}` }}
+                  >
+                    <td className="p-4" style={{ borderColor: colors.medium }}>
+                      {req.userId?.name} ({req.userId?.email})
+                    </td>
+                    <td className="p-4" style={{ borderColor: colors.medium }}>
+                      {req.userId?.studentId}
+                    </td>
+                    <td className="p-4" style={{ borderColor: colors.medium }}>
+                      {req.clubId?.name}
+                    </td>
+                    <td
+                      className="p-4 capitalize"
+                      style={{ borderColor: colors.medium, color: colors.dark }}
+                    >
+                      {req.status}
+                    </td>
+                    <td className="p-4 space-x-3" style={{ borderColor: colors.medium }}>
+                      {req.status === 'pending' ? (
+                        <>
+                          <button
+                            className="px-3 py-1 rounded-lg shadow transition font-semibold"
+                            onClick={async () => {
+                              setLoading(true);
+                              try {
+                                await api.put(`/clubs/requests/${req._id}`, { status: 'approved' });
+                                setRefresh(r => !r);
+                              } catch {
+                                setError('Failed to approve request');
+                              } finally {
+                                setLoading(false);
+                              }
+                            }}
+                            aria-label={`Approve join request from ${req.userId?.name}`}
+                            style={{
+                              backgroundColor: colors.medium,
+                              color: '#fff',
+                            }}
+                            onMouseOver={e => e.currentTarget.style.backgroundColor = colors.dark}
+                            onMouseOut={e => e.currentTarget.style.backgroundColor = colors.medium}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            className="px-3 py-1 rounded-lg shadow transition font-semibold"
+                            onClick={async () => {
+                              setLoading(true);
+                              try {
+                                await api.put(`/clubs/requests/${req._id}`, { status: 'rejected' });
+                                setRefresh(r => !r);
+                              } catch {
+                                setError('Failed to reject request');
+                              } finally {
+                                setLoading(false);
+                              }
+                            }}
+                            aria-label={`Reject join request from ${req.userId?.name}`}
+                            style={{
+                              backgroundColor: '#9b2226',
+                              color: '#fff',
+                            }}
+                            onMouseOver={e => e.currentTarget.style.backgroundColor = '#7a1a1d'}
+                            onMouseOut={e => e.currentTarget.style.backgroundColor = '#9b2226'}
+                          >
+                            Reject
+                          </button>
+                        </>
+                      ) : (
+                        <span style={{ color: '#666', fontWeight: '600', textTransform: 'capitalize' }}>
+                          {req.status}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))
               )}
-              {joinRequests.map(req => (
-                <tr
-                  key={req._id}
-                  className="hover:bg-indigo-50 transition cursor-default"
-                >
-                  <td className="p-4 border-b border-indigo-200">
-                    {req.userId?.name} ({req.userId?.email})
-                  </td>
-                  <td className="p-4 border-b border-indigo-200">
-                    {req.userId?.studentId}
-                  </td>
-                  <td className="p-4 border-b border-indigo-200">{req.clubId?.name}</td>
-                  <td className="p-4 border-b border-indigo-200 capitalize">
-                    {req.status}
-                  </td>
-                  <td className="p-4 border-b border-indigo-200 space-x-3">
-                    {req.status === 'pending' ? (
-                      <>
-                        <button
-                          className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg shadow transition"
-                          onClick={async () => {
-                            setLoading(true);
-                            try {
-                              await api.put(`/clubs/requests/${req._id}`, { status: 'approved' });
-                              setRefresh(r => !r);
-                            } catch {
-                              setError('Failed to approve request');
-                            } finally {
-                              setLoading(false);
-                            }
-                          }}
-                          aria-label={`Approve join request from ${req.userId?.name}`}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg shadow transition"
-                          onClick={async () => {
-                            setLoading(true);
-                            try {
-                              await api.put(`/clubs/requests/${req._id}`, { status: 'rejected' });
-                              setRefresh(r => !r);
-                            } catch {
-                              setError('Failed to reject request');
-                            } finally {
-                              setLoading(false);
-                            }
-                          }}
-                          aria-label={`Reject join request from ${req.userId?.name}`}
-                        >
-                          Reject
-                        </button>
-                      </>
-                    ) : (
-                      <span className="text-gray-500 font-medium capitalize">
-                        {req.status}
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
             </tbody>
           </table>
         </div>
