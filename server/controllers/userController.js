@@ -1,5 +1,5 @@
-const asyncHandler = require('express-async-handler');
-const User = require('../models/User');
+const asyncHandler = require("express-async-handler");
+const User = require("../models/User");
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -13,12 +13,12 @@ const getAllUsers = asyncHandler(async (req, res) => {
 // @route   GET /api/users/:id
 // @access  Private/Super_Admin
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password');
+  const user = await User.findById(req.params.id).select("-password");
   if (user) {
     res.json(user);
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
 
@@ -39,7 +39,7 @@ const updateUserRole = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
 });
 
@@ -72,30 +72,42 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
+});
+
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Private/Super_Admin
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  await user.deleteOne();
+  res.json({ message: "User deleted" });
 });
 
 // @desc    Approve member registration
 // @route   PUT /api/users/:id/approve
 // @access  Private/Super_Admin
 const approveMemberRegistration = asyncHandler(async (req, res) => {
-    // This is a conceptual endpoint. In this schema, users are members by default.
-    // This could be adapted if there was a 'status' field on the User model.
-    // For now, we can just confirm the user exists.
-    const user = await User.findById(req.params.id);
+  // This is a conceptual endpoint. In this schema, users are members by default.
+  // This could be adapted if there was a 'status' field on the User model.
+  // For now, we can just confirm the user exists.
+  const user = await User.findById(req.params.id);
 
-    if (user) {
-        // In a real scenario, you might change a user's status from 'pending' to 'active'
-        // user.status = 'active';
-        // await user.save();
-        res.json({ message: 'User registration approved conceptually.' });
-    } else {
-        res.status(404);
-        throw new Error('User not found');
-    }
+  if (user) {
+    // In a real scenario, you might change a user's status from 'pending' to 'active'
+    // user.status = 'active';
+    // await user.save();
+    res.json({ message: "User registration approved conceptually." });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
 });
-
 
 module.exports = {
   getAllUsers,
@@ -103,4 +115,5 @@ module.exports = {
   updateUserRole,
   updateUserProfile,
   approveMemberRegistration,
+  deleteUser,
 };

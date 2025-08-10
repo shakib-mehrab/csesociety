@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 const API_BASE = '/api/users';
@@ -9,6 +10,23 @@ const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [role, setRole] = useState('');
   const [refresh, setRefresh] = useState(false);
+  const [deleteUserId, setDeleteUserId] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  // Delete user handler
+  const handleDeleteUser = async () => {
+    if (!deleteUserId) return;
+    setDeleting(true);
+    setError('');
+    try {
+      await api.delete(`/users/${deleteUserId}`);
+      setDeleteUserId(null);
+      setRefresh(r => !r);
+    } catch (err) {
+      setError('Failed to delete user');
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const [joinRequests, setJoinRequests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -115,7 +133,7 @@ const UserManagement = () => {
                     <td className="p-4 border-b border-indigo-200">{user.name}</td>
                     <td className="p-4 border-b border-indigo-200">{user.email}</td>
                     <td className="p-4 border-b border-indigo-200 capitalize">{user.role}</td>
-                    <td className="p-4 border-b border-indigo-200">
+                    <td className="p-4 border-b border-indigo-200 flex gap-2">
                       <button
                         className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1 rounded-lg shadow transition"
                         onClick={() => handleRoleChange(user)}
@@ -123,9 +141,48 @@ const UserManagement = () => {
                       >
                         Change Role
                       </button>
+                      <button
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-lg shadow transition"
+                        onClick={() => setDeleteUserId(user._id)}
+                        aria-label={`Delete user ${user.name}`}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
+      {/* Delete Confirmation Modal */}
+      {deleteUserId && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-5" role="dialog" aria-modal="true">
+          <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full relative animate-fadeIn">
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-red-600 text-3xl font-bold focus:outline-none"
+              onClick={() => setDeleteUserId(null)}
+              aria-label="Close delete modal"
+            >
+              &times;
+            </button>
+            <h4 className="text-2xl font-extrabold mb-6 text-red-700">Confirm Deletion</h4>
+            <p className="mb-6">Are you sure you want to delete this user? This action cannot be undone.</p>
+            <div className="flex gap-4">
+              <button
+                className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 rounded-full font-semibold shadow transition"
+                onClick={() => setDeleteUserId(null)}
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-full font-semibold shadow transition"
+                onClick={handleDeleteUser}
+                disabled={deleting}
+              >
+                {deleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
               </tbody>
             </table>
           </div>

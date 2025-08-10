@@ -14,5 +14,6 @@ router.get('/:id', protect, authorizeRoles('super_admin'), getUserById);
 router.put('/:id/role', protect, authorizeRoles('super_admin'), updateUserRole);
 router.put('/profile', protect, updateUserProfile);
 router.put('/:id/approve', protect, authorizeRoles('super_admin'), approveMemberRegistration);
+router.delete('/:id', protect, authorizeRoles('super_admin'), require('../controllers/userController').deleteUser);
 
 module.exports = router;
