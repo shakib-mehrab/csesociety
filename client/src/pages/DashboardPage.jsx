@@ -18,6 +18,7 @@ const DashboardPage = () => {
       case 'coordinator':
         return <AdminDashboard />;
       case 'member':
+      case 'sub_coordinator':
         return <MemberDashboard />;
       default:
         return <div>Welcome!</div>;

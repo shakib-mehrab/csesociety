@@ -35,7 +35,7 @@ const markTaskCompleted = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('Task not found');
   }
-  console.log(req.user.clubsJoined[0]); 
+  // console.log(req.user.clubsJoined[0]); 
   
   // Only allow if the user's club is assigned
   if (req.user.role !== 'coordinator' || !task.assignedClubs.some(clubId => clubId.equals(req.user.club))) {

@@ -85,6 +85,8 @@ const getMe = asyncHandler(async (req, res) => {
       clubsJoined: user.clubsJoined,
       department: user.department,
       profilePicture: user.profilePicture,
+      phone: user.phone,
+      batch: user.batch,
     });
   } else {
     res.status(404);
