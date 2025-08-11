@@ -30,16 +30,18 @@ const EventsPage = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 md:px-8">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">🎉 Events</h1>
-        <div className="relative w-full md:w-72 mt-4 md:mt-0">
+    <div className="min-h-screen bg-gradient-to-br from-[#eaf2fa] via-[#f3f6fa] to-[#6aa9d0] py-12 px-4 md:px-8">
+      {/* Page Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
+        <h1 className="text-4xl font-extrabold text-gray-800 tracking-tight">
+          Events
+        </h1>
+        <div className="relative w-full md:w-80 mt-4 md:mt-0">
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
           <input
             type="text"
             placeholder="Search events..."
-            className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white transition duration-200"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -48,18 +50,18 @@ const EventsPage = () => {
 
       {/* Events Grid */}
       {filteredEvents.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredEvents.map((event) => (
             <div
               key={event._id}
-              className="transform transition-all hover:-translate-y-1 hover:shadow-lg"
+              className="transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <EventCard event={event} />
             </div>
           ))}
         </div>
       ) : (
-        <div className="bg-white p-6 rounded-xl shadow-md text-center text-gray-500">
+        <div className="bg-white p-8 rounded-xl shadow-md text-center text-gray-500 text-lg">
           No events found.
         </div>
       )}

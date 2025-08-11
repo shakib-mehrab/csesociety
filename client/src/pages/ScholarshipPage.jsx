@@ -28,38 +28,38 @@ const ScholarshipPage = () => {
     : null;
 
   return (
-    <div className="max-w-5xl mx-auto py-10 px-4">
-      <h1 className="text-4xl font-extrabold mb-8 flex items-center gap-3 text-indigo-700">
-        <Award className="text-indigo-500" size={32} /> Available Scholarships
+    <div className="max-w-5xl mx-auto py-10 px-4 bg-[#f5faff] min-h-screen">
+      <h1 className="text-4xl font-extrabold mb-8 flex items-center gap-3 text-[#01457e]">
+        <Award className="text-[#6aa9d0]" size={32} /> Available Scholarships
       </h1>
 
       {scholarships.length === 0 ? (
-        <div className="text-center text-gray-500 italic">No scholarships available right now.</div>
+        <div className="text-center text-[#004983] italic">No scholarships available right now.</div>
       ) : (
         <div className="grid md:grid-cols-2 gap-6">
           {scholarships.map(s => (
             <div
               key={s._id}
-              className="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-xl transition duration-200"
+              className="bg-white rounded-xl shadow-md border border-[#01457e] p-6 hover:shadow-xl transition duration-200"
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-3">{s.name}</h2>
+              <h2 className="text-xl font-semibold text-[#002147] mb-3">{s.name}</h2>
               <div className="flex flex-col gap-2 mb-4">
                 <button
                   onClick={() => openDetailModal(s._id, 'elig')}
-                  className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium"
+                  className="flex items-center gap-2 text-[#01457e] hover:text-[#002147] font-medium"
                 >
                   <FileText size={18} /> View Eligibility
                 </button>
                 <button
                   onClick={() => openDetailModal(s._id, 'rules')}
-                  className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium"
+                  className="flex items-center gap-2 text-[#01457e] hover:text-[#002147] font-medium"
                 >
                   <ClipboardList size={18} /> View Rules & Regulations
                 </button>
               </div>
               <button
                 onClick={() => setShowApply(s._id)}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
+                className="bg-[#01457e] hover:bg-[#002147] text-white px-4 py-2 rounded-lg flex items-center gap-2 transition"
               >
                 <CheckCircle size={18} /> Apply Now
               </button>
@@ -77,7 +77,7 @@ const ScholarshipPage = () => {
           aria-modal="true"
           aria-labelledby="detailModalTitle"
           style={{
-            backgroundColor: 'rgba(255 255 255 / 0.25)',
+            backgroundColor: 'rgba(0 33 71 / 0.25)',
             backdropFilter: 'blur(8px)',
           }}
         >
@@ -86,7 +86,7 @@ const ScholarshipPage = () => {
             onClick={e => e.stopPropagation()}
           >
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition"
+              className="absolute top-3 right-3 text-[#01457e] hover:text-[#002147] transition"
               onClick={closeDetailModal}
               aria-label="Close details modal"
             >
@@ -95,7 +95,7 @@ const ScholarshipPage = () => {
 
             <h3
               id="detailModalTitle"
-              className="font-bold text-2xl mb-4 text-indigo-700 flex items-center gap-2 sticky top-0 bg-white pt-4"
+              className="font-bold text-2xl mb-4 text-[#01457e] flex items-center gap-2 sticky top-0 bg-white pt-4"
               style={{ zIndex: 10 }}
             >
               {selectedDetail.type === 'elig' ? (
@@ -108,7 +108,11 @@ const ScholarshipPage = () => {
                 </>
               )}
             </h3>
-            <p className="text-gray-700 whitespace-pre-line">{selectedDetail.type === 'elig' ? selectedScholarship.eligibility : selectedScholarship.rules}</p>
+            <p className="text-[#002147] whitespace-pre-line">
+              {selectedDetail.type === 'elig'
+                ? selectedScholarship.eligibility
+                : selectedScholarship.rules}
+            </p>
           </div>
         </div>
       )}
@@ -122,7 +126,7 @@ const ScholarshipPage = () => {
           aria-labelledby="applyModalTitle"
           onClick={() => setShowApply(false)}
           style={{
-            backgroundColor: 'rgba(255 255 255 / 0.25)',
+            backgroundColor: 'rgba(0 33 71 / 0.25)',
             backdropFilter: 'blur(8px)',
           }}
         >
@@ -131,7 +135,7 @@ const ScholarshipPage = () => {
             onClick={e => e.stopPropagation()}
           >
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition"
+              className="absolute top-3 right-3 text-[#01457e] hover:text-[#002147] transition"
               onClick={() => setShowApply(false)}
               aria-label="Close application modal"
             >
@@ -139,7 +143,7 @@ const ScholarshipPage = () => {
             </button>
             <h3
               id="applyModalTitle"
-              className="font-bold text-2xl mb-6 text-green-700 flex items-center gap-2 sticky top-0 bg-white pt-4"
+              className="font-bold text-2xl mb-6 text-[#01457e] flex items-center gap-2 sticky top-0 bg-white pt-4"
               style={{ zIndex: 10 }}
             >
               <CheckCircle size={26} /> Apply for Scholarship

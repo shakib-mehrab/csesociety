@@ -55,25 +55,25 @@ const ClubAnnouncements = () => {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-xl p-6">
-      <h4 className="font-semibold text-lg mb-4 text-gray-800">
+    <div className="bg-gradient-to-br from-[#eaf2fa] via-[#6aa9d0]/20 to-[#002147]/10 shadow-md rounded-2xl p-6 border border-[#01457e]/20">
+      <h4 className="font-extrabold text-2xl mb-4 text-[#002147] tracking-wide">
         Club Announcements
       </h4>
 
       <div className="overflow-x-auto">
-        <table className="w-full border border-gray-200 rounded-lg overflow-hidden">
-          <thead className="bg-gray-50 text-gray-700">
+        <table className="w-full border border-[#01457e]/30 rounded-xl overflow-hidden">
+          <thead className="bg-gradient-to-r from-[#002147] via-[#01457e] to-[#004983] text-white">
             <tr>
-              <th className="py-3 px-4 text-left">Type</th>
-              <th className="py-3 px-4 text-left">Title</th>
-              <th className="py-3 px-4 text-left">Date</th>
-              <th className="py-3 px-4 text-left">Content</th>
+              <th className="py-3 px-4 text-left font-semibold">Type</th>
+              <th className="py-3 px-4 text-left font-semibold">Title</th>
+              <th className="py-3 px-4 text-left font-semibold">Date</th>
+              <th className="py-3 px-4 text-left font-semibold">Content</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white/80">
             {announcements.length === 0 ? (
               <tr>
-                <td colSpan={4} className="py-4 px-4 text-center text-gray-500">
+                <td colSpan={4} className="py-4 px-4 text-center text-[#01457e]">
                   No announcements
                 </td>
               </tr>
@@ -81,12 +81,12 @@ const ClubAnnouncements = () => {
               announcements.map(a => (
                 <tr
                   key={a.type + a._id}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-[#eaf2fa] transition-colors"
                 >
-                  <td className="py-3 px-4">{a.type}</td>
-                  <td className="py-3 px-4">{a.title}</td>
-                  <td className="py-3 px-4">{a.date ? a.date.slice(0, 10) : '-'}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-3 px-4 text-[#004983] font-semibold">{a.type}</td>
+                  <td className="py-3 px-4 text-[#002147] font-medium">{a.title}</td>
+                  <td className="py-3 px-4 text-[#01457e]">{a.date ? a.date.slice(0, 10) : '-'}</td>
+                  <td className="py-3 px-4 text-[#01457e]">
                     {a.content?.slice(0, 60)}
                     {a.content?.length > 60 ? '...' : ''}
                   </td>

@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import api from '../../../services/api';
 import { useAuth } from '../../../hooks/useAuth';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Calendar, Clock, MapPin, FileText, Pencil, DollarSign, Info } from 'lucide-react';
 
 const ClubEvents = () => {
   const { user } = useAuth();
@@ -14,6 +16,15 @@ const ClubEvents = () => {
   const [refresh, setRefresh] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const clubId = user?.clubsJoined[0];
+  const [clubName, setClubName] = useState('');
+
+  useEffect(() => {
+    // Fetch club name for the current clubId
+    if (!clubId) return;
+    api.get(`/clubs/${clubId}`)
+      .then(res => setClubName(res.data?.name || ''))
+      .catch(() => setClubName(''));
+  }, [clubId]);
 
   useEffect(() => {
     if (!clubId) return;
@@ -86,12 +97,12 @@ const ClubEvents = () => {
   if (error) return <div className="text-red-500 bg-red-50 p-3 rounded-lg border border-red-200 mb-4">{error}</div>;
 
   return (
-    <div className="bg-[#eaeaec] shadow-md rounded-xl p-6">
-      <h4 className="font-semibold text-lg mb-4 text-gray-800">Club Events</h4>
+    <div className="bg-gradient-to-br from-[#eaf2fa] via-[#6aa9d0]/20 to-[#002147]/10 shadow-md rounded-2xl p-6 border border-[#01457e]/20">
+      <h4 className="font-extrabold text-2xl mb-4 text-[#002147] tracking-wide">Club Events</h4>
 
       <div className="mb-6">
         <button
-          className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
+          className="bg-[#004983] hover:bg-[#002147] text-white px-6 py-2 rounded-lg font-semibold shadow transition"
           onClick={() => { setShowForm(true); setEditId(null); setForm({ title: '', description: '', date: null, time: '', venue: '', registrationDeadline: null, fee: 0 }); }}
         >
           Add Event
@@ -99,107 +110,133 @@ const ClubEvents = () => {
       </div>
 
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-lg relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Blurry overlay */}
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" style={{ zIndex: 0 }} />
+          <div className="relative bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg mx-4 flex flex-col items-center" style={{ zIndex: 1 }}>
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl"
               onClick={() => { setShowForm(false); setEditId(null); }}
               aria-label="Close"
+              type="button"
             >
               &times;
             </button>
-            <form onSubmit={handleSubmit} className="space-y-3">
-              
-              {/* Select Club */}
-              <select
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                value={clubId || ''}
-                disabled
-              >
-                <option value="">Select Club</option>
-                {user?.clubsJoined?.map(club => (
-                  <option key={club} value={club}>{club}</option>
-                ))}
-              </select>
+            <form onSubmit={handleSubmit} className="w-full space-y-5 mt-2">
+              {/* Club Name (disabled, styled) */}
+              <div className="relative flex items-center">
+                <Info className="absolute left-3 text-[#01457e]" size={20} />
+                <input
+                  className="pl-10 border border-[#01457e] p-3 rounded-lg w-full bg-[#eaf2fa] text-[#002147] font-semibold cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-[#6aa9d0]"
+                  value={clubName || ''}
+                  disabled
+                  placeholder="Club Name"
+                  style={{ letterSpacing: '0.5px' }}
+                />
+              </div>
 
-              <input
-                name="title"
-                value={form.title}
-                onChange={handleInput}
-                placeholder="Title"
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+              {/* Title */}
+              <div className="relative flex items-center">
+                <Pencil className="absolute left-3 text-[#01457e]" size={20} />
+                <input
+                  name="title"
+                  value={form.title}
+                  onChange={handleInput}
+                  placeholder="Event Title"
+                  className="pl-10 border border-[#01457e] p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#6aa9d0]"
+                  required
+                />
+              </div>
 
-              <textarea
-                name="description"
-                value={form.description}
-                onChange={handleInput}
-                placeholder="Description"
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
-                rows={4}
-                required
-              />
+              {/* Description */}
+              <div className="relative flex items-start">
+                <FileText className="absolute left-3 top-3 text-[#01457e]" size={20} />
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleInput}
+                  placeholder="Event Description"
+                  className="pl-10 border border-[#01457e] p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#6aa9d0] resize-none"
+                  rows={4}
+                  required
+                />
+              </div>
 
-              <div className="relative">
+              {/* Event Date */}
+              <div className="relative flex items-center">
+                <Calendar className="absolute left-3 text-[#01457e]" size={20} />
                 <DatePicker
                   selected={form.date}
                   onChange={handleDateChange}
                   placeholderText="Event Date"
-                  className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="pl-10 border border-[#01457e] p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#6aa9d0]"
                   dateFormat="yyyy-MM-dd"
                   required
                 />
               </div>
 
-              <input
-                name="time"
-                value={form.time}
-                onChange={handleInput}
-                placeholder="Time"
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+              {/* Time */}
+              <div className="relative flex items-center">
+                <Clock className="absolute left-3 text-[#01457e]" size={20} />
+                <input
+                  name="time"
+                  value={form.time}
+                  onChange={handleInput}
+                  placeholder="Event Time (e.g. 10:00 AM)"
+                  className="pl-10 border border-[#01457e] p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#6aa9d0]"
+                  required
+                />
+              </div>
 
-              <input
-                name="venue"
-                value={form.venue}
-                onChange={handleInput}
-                placeholder="Venue"
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+              {/* Venue */}
+              <div className="relative flex items-center">
+                <MapPin className="absolute left-3 text-[#01457e]" size={20} />
+                <input
+                  name="venue"
+                  value={form.venue}
+                  onChange={handleInput}
+                  placeholder="Venue"
+                  className="pl-10 border border-[#01457e] p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#6aa9d0]"
+                  required
+                />
+              </div>
 
-              <div className="relative">
+              {/* Registration Deadline */}
+              <div className="relative flex items-center">
+                <Calendar className="absolute left-3 text-[#01457e]" size={20} />
                 <DatePicker
                   selected={form.registrationDeadline}
                   onChange={handleRegDeadlineChange}
                   placeholderText="Registration Deadline"
-                  className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="pl-10 border border-[#01457e] p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#6aa9d0]"
                   dateFormat="yyyy-MM-dd"
                 />
               </div>
 
-              <input
-                type="number"
-                name="fee"
-                value={form.fee}
-                onChange={handleInput}
-                placeholder="Fee"
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                min={0}
-              />
+              {/* Fee */}
+              <div className="relative flex items-center">
+                <DollarSign className="absolute left-3 text-[#01457e]" size={20} />
+                <input
+                  type="number"
+                  name="fee"
+                  value={form.fee}
+                  onChange={handleInput}
+                  placeholder="Event Fee (optional)"
+                  className="pl-10 border border-[#01457e] p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-[#6aa9d0]"
+                  min={0}
+                />
+              </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 justify-end pt-2">
                 <button
                   type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition"
+                  className="bg-[#004983] hover:bg-[#002147] text-white px-6 py-2 rounded-lg font-semibold shadow transition"
                 >
                   {editId ? 'Update' : 'Create'}
                 </button>
                 <button
                   type="button"
-                  className="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2 rounded-lg transition"
+                  className="bg-[#6aa9d0] hover:bg-[#01457e] text-white px-6 py-2 rounded-lg font-semibold shadow transition"
                   onClick={() => { setEditId(null); setShowForm(false); setForm({ title: '', description: '', date: null, time: '', venue: '', registrationDeadline: null, fee: 0 }); setError(''); }}
                 >
                   Cancel
@@ -211,33 +248,33 @@ const ClubEvents = () => {
       )}
 
       <div className="overflow-x-auto">
-        <table className="w-full border border-gray-200 rounded-lg overflow-hidden">
-          <thead className="bg-gray-50 text-gray-700">
+        <table className="w-full border border-[#01457e]/30 rounded-xl overflow-hidden">
+          <thead className="bg-gradient-to-r from-[#002147] via-[#01457e] to-[#004983] text-white">
             <tr>
-              <th className="py-3 px-4 text-left">Title</th>
-              <th className="py-3 px-4 text-left">Date</th>
-              <th className="py-3 px-4 text-left">Time</th>
-              <th className="py-3 px-4 text-left">Venue</th>
-              <th className="py-3 px-4 text-left">Actions</th>
+              <th className="py-3 px-4 text-left font-semibold">Title</th>
+              <th className="py-3 px-4 text-left font-semibold">Date</th>
+              <th className="py-3 px-4 text-left font-semibold">Time</th>
+              <th className="py-3 px-4 text-left font-semibold">Venue</th>
+              <th className="py-3 px-4 text-left font-semibold">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white/80">
             {events.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-4 px-4 text-center text-gray-500">No events</td>
+                <td colSpan={5} className="py-4 px-4 text-center text-[#01457e]">No events</td>
               </tr>
             ) : (
               events.map(e => (
-                <tr key={e._id} className="hover:bg-gray-50 transition-colors">
-                  <td className="py-3 px-4">{e.title}</td>
-                  <td className="py-3 px-4">{e.date ? (new Date(e.date)).toLocaleDateString() : '-'}</td>
-                  <td className="py-3 px-4">{e.time}</td>
-                  <td className="py-3 px-4">{e.venue}</td>
+                <tr key={e._id} className="hover:bg-[#eaf2fa] transition-colors">
+                  <td className="py-3 px-4 text-[#002147] font-medium">{e.title}</td>
+                  <td className="py-3 px-4 text-[#01457e]">{e.date ? (new Date(e.date)).toLocaleDateString() : '-'}</td>
+                  <td className="py-3 px-4 text-[#01457e]">{e.time}</td>
+                  <td className="py-3 px-4 text-[#01457e]">{e.venue}</td>
                   <td className="py-3 px-4 space-x-2">
                     {canEditOrDelete(e) ? (
                       <>
                         <button
-                          className="bg-[#025498] hover:bg-[#012047] text-white px-3 py-1.5 rounded-lg transition"
+                          className="bg-[#004983] hover:bg-[#002147] text-white px-3 py-1.5 rounded-lg transition"
                           onClick={() => handleEdit(e)}
                         >
                           Edit
@@ -250,7 +287,7 @@ const ClubEvents = () => {
                         </button>
                       </>
                     ) : (
-                      <span className="text-gray-400">View Only</span>
+                      <span className="text-[#6aa9d0]">View Only</span>
                     )}
                   </td>
                 </tr>

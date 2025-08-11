@@ -44,26 +44,26 @@ const ClubMembers = () => {
   }
 
   return (
-    <div className="bg-white shadow-md rounded-xl p-6">
-      <h4 className="font-semibold text-lg mb-4 text-gray-800">
+    <div className="bg-gradient-to-br from-[#eaf2fa] via-[#6aa9d0]/20 to-[#002147]/10 shadow-md rounded-2xl p-6 border border-[#01457e]/20">
+      <h4 className="font-extrabold text-2xl mb-4 text-[#002147] tracking-wide">
         Club Members
       </h4>
 
       <div className="overflow-x-auto">
-        <table className="w-full border border-gray-200 rounded-lg overflow-hidden">
-          <thead className="bg-gray-50 text-gray-700">
+        <table className="w-full border border-[#01457e]/30 rounded-xl overflow-hidden">
+          <thead className="bg-gradient-to-r from-[#002147] via-[#01457e] to-[#004983] text-white">
             <tr>
-              <th className="py-3 px-4 text-left">Name</th>
-              <th className="py-3 px-4 text-left">Email</th>
-              <th className="py-3 px-4 text-left">Student ID</th>
+              <th className="py-3 px-4 text-left font-semibold">Name</th>
+              <th className="py-3 px-4 text-left font-semibold">Email</th>
+              <th className="py-3 px-4 text-left font-semibold">Student ID</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white/80">
             {members.length === 0 ? (
               <tr>
                 <td
                   colSpan={3}
-                  className="py-4 px-4 text-center text-gray-500"
+                  className="py-4 px-4 text-center text-[#01457e]"
                 >
                   No members
                 </td>
@@ -72,11 +72,11 @@ const ClubMembers = () => {
               members.map(({ _id, name, email, studentId }) => (
                 <tr
                   key={_id}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-[#eaf2fa] transition-colors"
                 >
-                  <td className="py-3 px-4">{name}</td>
-                  <td className="py-3 px-4">{email}</td>
-                  <td className="py-3 px-4">{studentId}</td>
+                  <td className="py-3 px-4 text-[#002147] font-medium">{name}</td>
+                  <td className="py-3 px-4 text-[#01457e]">{email}</td>
+                  <td className="py-3 px-4 text-[#01457e]">{studentId}</td>
                 </tr>
               ))
             )}

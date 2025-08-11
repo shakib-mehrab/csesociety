@@ -37,8 +37,8 @@ const EventRegistrations = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h4 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">
+    <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-[#eaf2fa] via-[#6aa9d0]/20 to-[#002147]/10 rounded-2xl shadow-md border border-[#01457e]/20">
+      <h4 className="text-2xl font-extrabold text-[#002147] mb-6 border-b-2 border-[#01457e] pb-2 tracking-wide">
         Event Registrations
       </h4>
 
@@ -47,48 +47,49 @@ const EventRegistrations = () => {
       )}
 
       <div className="overflow-x-auto mb-8">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full table-auto text-sm rounded-xl overflow-hidden">
+          <thead className="bg-gradient-to-r from-[#002147] via-[#01457e] to-[#004983] text-white">
             <tr>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
               >
                 Event
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider"
               >
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white/80 divide-y divide-[#6aa9d0]/30">
             {loading && (
               <tr>
-                <td colSpan={2} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={2} className="px-6 py-4 text-center text-[#01457e]">
                   Loading events...
                 </td>
               </tr>
             )}
             {!loading && events.length === 0 && (
               <tr>
-                <td colSpan={2} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={2} className="px-6 py-4 text-center text-[#01457e]">
                   No events found.
                 </td>
               </tr>
             )}
             {!loading &&
               events.map((e) => (
-                <tr key={e._id} className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-700 font-medium">
+                <tr key={e._id} className="hover:bg-[#eaf2fa] transition-colors border-b last:border-b-0">
+                  <td className="px-6 py-4 whitespace-nowrap text-[#002147] font-medium">
                     {e.title}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right">
                     <button
                       onClick={() => handleView(e._id)}
-                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition"
+                      className="bg-[#004983] hover:bg-[#002147] text-white px-4 py-1 rounded-full font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-[#6aa9d0] focus:ring-offset-2"
+                      style={{ minWidth: 120 }}
                     >
                       View Registrations
                     </button>
@@ -101,62 +102,62 @@ const EventRegistrations = () => {
 
       {selected && (
         <div>
-          <h5 className="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">
+          <h5 className="text-xl font-semibold text-[#002147] mb-4 border-b-2 border-[#01457e] pb-2">
             Registrations for{' '}
-            <span className="text-blue-600">
+            <span className="text-[#004983]">
               {events.find((e) => e._id === selected)?.title}
             </span>
           </h5>
 
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full table-auto text-sm rounded-xl overflow-hidden">
+              <thead className="bg-gradient-to-r from-[#002147] via-[#01457e] to-[#004983] text-white">
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
                   >
                     Name
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
                   >
                     Email
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
                   >
                     Student ID
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white/80 divide-y divide-[#6aa9d0]/30">
                 {loading && (
                   <tr>
-                    <td colSpan={3} className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan={3} className="px-6 py-4 text-center text-[#01457e]">
                       Loading registrations...
                     </td>
                   </tr>
                 )}
                 {!loading && registrations.length === 0 && (
                   <tr>
-                    <td colSpan={3} className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan={3} className="px-6 py-4 text-center text-[#01457e]">
                       No registrations found.
                     </td>
                   </tr>
                 )}
                 {!loading &&
                   registrations.map((r) => (
-                    <tr key={r._id} className="hover:bg-gray-50 transition">
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                    <tr key={r._id} className="hover:bg-[#eaf2fa] transition-colors border-b last:border-b-0">
+                      <td className="px-6 py-4 whitespace-nowrap text-[#002147]">
                         {r.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                      <td className="px-6 py-4 whitespace-nowrap text-[#01457e]">
                         {r.email}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                      <td className="px-6 py-4 whitespace-nowrap text-[#01457e]">
                         {r.studentId}
                       </td>
                     </tr>

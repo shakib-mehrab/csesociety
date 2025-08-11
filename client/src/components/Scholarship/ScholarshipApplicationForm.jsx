@@ -78,18 +78,18 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
       noValidate
       aria-label="Scholarship application form"
     >
-      <h3 className="text-2xl font-extrabold text-indigo-700 mb-4">Scholarship Application</h3>
+      <h3 className="text-2xl font-extrabold text-[#01457e] mb-4">Scholarship Application</h3>
 
-      {/* Photo Upload with Placeholder and Preview */}
+      {/* Photo Upload */}
       <div>
         <label
           htmlFor="photo"
-          className="block mb-1 font-semibold text-gray-700"
+          className="block mb-1 font-semibold text-[#002147]"
         >
           Upload Your Photo
         </label>
         <div className="flex items-center gap-4 mb-2">
-          <div className="w-24 h-24 bg-gray-100 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center overflow-hidden relative">
+          <div className="w-24 h-24 bg-gray-100 border-2 border-dashed border-[#6aa9d0] rounded-md flex items-center justify-center overflow-hidden relative">
             {form.photo ? (
               <img
                 src={typeof form.photo === 'string' ? form.photo : URL.createObjectURL(form.photo)}
@@ -97,7 +97,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
                 className="object-cover w-full h-full"
               />
             ) : (
-              <span className="text-gray-400 text-xs text-center">Photo Preview</span>
+              <span className="text-[#6aa9d0] text-xs text-center">Photo Preview</span>
             )}
           </div>
           <input
@@ -107,18 +107,18 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
             accept="image/*"
             onChange={handleInput}
             required
-            className="border border-gray-300 rounded-md p-2 cursor-pointer focus:outline-indigo-500 focus:ring-1 focus:ring-indigo-500"
+            className="border border-[#6aa9d0] rounded-md p-2 cursor-pointer focus:outline-[#01457e] focus:ring-1 focus:ring-[#01457e]"
             aria-describedby="photoHelp"
           />
         </div>
-        <small id="photoHelp" className="text-gray-500 text-sm">
+        <small id="photoHelp" className="text-[#004983] text-sm">
           Please upload a recent passport size photo.
         </small>
       </div>
 
       {/* Personal Info */}
-      <fieldset className="border border-gray-200 rounded-lg p-4">
-        <legend className="text-indigo-700 font-semibold mb-2">Personal Information</legend>
+      <fieldset className="border border-[#01457e] rounded-lg p-4">
+        <legend className="text-[#01457e] font-semibold mb-4">Personal Information</legend>
         <div className="grid gap-4 md:grid-cols-2">
           {[
             { label: 'Student Name', name: 'studentName', value: form.studentName, required: true },
@@ -133,7 +133,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
             <div key={name}>
               <label
                 htmlFor={name}
-                className="block mb-1 text-gray-700 font-medium"
+                className="block mb-1 text-[#002147] font-medium"
               >
                 {label}
               </label>
@@ -145,7 +145,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
                 required={required}
                 type="text"
                 autoComplete="off"
-                className="w-full border border-gray-300 rounded-md p-3 focus:outline-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="w-full border border-[#6aa9d0] rounded-md p-3 focus:outline-[#01457e] focus:ring-1 focus:ring-[#01457e]"
                 aria-label={label}
               />
             </div>
@@ -154,8 +154,8 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
       </fieldset>
 
       {/* Academic Info */}
-      <fieldset className="border border-gray-200 rounded-lg p-4">
-        <legend className="text-indigo-700 font-semibold mb-2">Academic Details</legend>
+      <fieldset className="border border-[#01457e] rounded-lg p-4">
+        <legend className="text-[#01457e] font-semibold mb-4">Academic Details</legend>
         <div className="grid gap-4 md:grid-cols-2">
           {[
             { label: 'SSC Grade', name: 'sscGrade', value: form.sscGrade },
@@ -165,7 +165,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
             <div key={name}>
               <label
                 htmlFor={name}
-                className="block mb-1 text-gray-700 font-medium"
+                className="block mb-1 text-[#002147] font-medium"
               >
                 {label}
               </label>
@@ -176,7 +176,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
                 onChange={handleInput}
                 type="text"
                 autoComplete="off"
-                className="w-full border border-gray-300 rounded-md p-3 focus:outline-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="w-full border border-[#6aa9d0] rounded-md p-3 focus:outline-[#01457e] focus:ring-1 focus:ring-[#01457e]"
                 aria-label={label}
               />
             </div>
@@ -185,8 +185,8 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
       </fieldset>
 
       {/* Permanent Address */}
-      <fieldset className="border border-gray-200 rounded-lg p-4">
-        <legend className="text-indigo-700 font-semibold mb-2">Permanent Address</legend>
+      <fieldset className="border border-[#01457e] rounded-lg p-4">
+        <legend className="text-[#01457e] font-semibold mb-4">Permanent Address</legend>
         <div className="grid gap-4 md:grid-cols-2">
           {[
             { label: 'Village', name: 'permanentAddress.village', value: form.permanentAddress.village },
@@ -197,7 +197,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
             <div key={name}>
               <label
                 htmlFor={name}
-                className="block mb-1 text-gray-700 font-medium"
+                className="block mb-1 text-[#002147] font-medium"
               >
                 {label}
               </label>
@@ -209,7 +209,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
                 required
                 type="text"
                 autoComplete="off"
-                className="w-full border border-gray-300 rounded-md p-3 focus:outline-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                className="w-full border border-[#6aa9d0] rounded-md p-3 focus:outline-[#01457e] focus:ring-1 focus:ring-[#01457e]"
                 aria-label={label}
               />
             </div>
@@ -221,7 +221,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
       <div>
         <label
           htmlFor="presentAddress"
-          className="block mb-1 text-gray-700 font-medium"
+          className="block mb-1 text-[#002147] font-medium"
         >
           Present Address
         </label>
@@ -233,33 +233,33 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
           required
           type="text"
           autoComplete="off"
-          className="w-full border border-gray-300 rounded-md p-3 focus:outline-indigo-500 focus:ring-1 focus:ring-indigo-500"
+          className="w-full border border-[#6aa9d0] rounded-md p-3 focus:outline-[#01457e] focus:ring-1 focus:ring-[#01457e]"
           aria-label="Present Address"
         />
       </div>
 
       {/* Family Expense Yes/No */}
-      <div className="flex items-center gap-4">
-        <span className="font-medium text-gray-700">Is family able to take education expense?</span>
-        <label className="flex items-center gap-1 cursor-pointer">
+      <div className="flex items-center gap-6 mt-2">
+        <span className="font-medium text-[#002147]">Is family able to take education expense?</span>
+        <label className="flex items-center gap-2 cursor-pointer text-[#01457e]">
           <input
             type="radio"
             name="familyExpense"
             value="yes"
             checked={form.familyExpense === true}
             onChange={() => setForm(f => ({ ...f, familyExpense: true }))}
-            className="accent-indigo-600"
+            className="accent-[#01457e]"
           />
           <span>Yes</span>
         </label>
-        <label className="flex items-center gap-1 cursor-pointer">
+        <label className="flex items-center gap-2 cursor-pointer text-[#01457e]">
           <input
             type="radio"
             name="familyExpense"
             value="no"
             checked={form.familyExpense === false}
             onChange={() => setForm(f => ({ ...f, familyExpense: false }))}
-            className="accent-indigo-600"
+            className="accent-[#01457e]"
           />
           <span>No</span>
         </label>
@@ -269,7 +269,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
       <div>
         <label
           htmlFor="familyCondition"
-          className="block mb-1 text-gray-700 font-medium"
+          className="block mb-1 text-[#002147] font-medium"
         >
           Family Economic Condition
         </label>
@@ -281,7 +281,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
           required
           type="text"
           autoComplete="off"
-          className="w-full border border-gray-300 rounded-md p-3 focus:outline-indigo-500 focus:ring-1 focus:ring-indigo-500"
+          className="w-full border border-[#6aa9d0] rounded-md p-3 focus:outline-[#01457e] focus:ring-1 focus:ring-[#01457e]"
           aria-label="Family Economic Condition"
         />
       </div>
@@ -290,7 +290,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
       <div>
         <label
           htmlFor="reference"
-          className="block mb-1 text-gray-700 font-medium"
+          className="block mb-1 text-[#002147] font-medium"
         >
           Reference
         </label>
@@ -302,7 +302,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
           required
           type="text"
           autoComplete="off"
-          className="w-full border border-gray-300 rounded-md p-3 focus:outline-indigo-500 focus:ring-1 focus:ring-indigo-500"
+          className="w-full border border-[#6aa9d0] rounded-md p-3 focus:outline-[#01457e] focus:ring-1 focus:ring-[#01457e]"
           aria-label="Reference"
         />
       </div>
@@ -314,7 +314,7 @@ const ScholarshipApplicationForm = ({ scholarshipId, onClose }) => {
       <button
         type="submit"
         disabled={loading}
-        className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-semibold py-3 px-6 rounded-lg w-full transition"
+        className="bg-[#01457e] hover:bg-[#002147] disabled:bg-[#6aa9d0] text-white font-semibold py-3 px-6 rounded-lg w-full transition"
       >
         {loading ? 'Submitting...' : 'Submit Application'}
       </button>
