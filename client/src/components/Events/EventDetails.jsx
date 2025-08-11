@@ -43,7 +43,7 @@ const EventDetails = () => {
       await api.post(`/events/${id}/register`);
       toast.success('Registered for event!');
     } catch (error) {
-      const msg = error.response?.data?.message || 'Failed to register for event';
+      const msg = error.response?.data?.message || 'Sign In Required';
       if (msg.toLowerCase().includes('already registered')) {
         toast.error('Already registered for the event');
       } else {
