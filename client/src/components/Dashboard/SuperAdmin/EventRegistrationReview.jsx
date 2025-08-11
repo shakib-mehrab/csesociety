@@ -237,7 +237,7 @@ const EventRegistrationReview = () => {
                       className="p-4"
                       style={{ borderBottom: "1px solid #409fc8", color: "#002a54" }}
                     >
-                      {reg.payment ? reg.payment.transactionId : <span style={{ color: '#b0b0b0' }}>-</span>}
+                      {reg.payment ? reg.payment.transactionId.slice(0,15) + "..." : <span style={{ color: '#b0b0b0' }}>-</span>}
                     </td>
                     <td
                       className="p-4"

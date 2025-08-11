@@ -407,6 +407,51 @@ const UserManagement = () => {
         </div>
       )}
 
+      {/* Delete Confirmation Dialog */}
+      {deleteUserId && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-5"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full relative animate-fadeIn"
+            style={{ borderColor: colors.medium, borderWidth: 1 }}
+          >
+            <h4 className="text-2xl font-extrabold mb-6" style={{ color: colors.darkest }}>
+              Confirm Deletion
+            </h4>
+            <p className="mb-6" style={{ color: colors.dark }}>
+              Are you sure you want to delete this user? This action cannot be undone.
+            </p>
+            <div className="flex gap-4 justify-end">
+              <button
+                className="px-5 py-2 rounded-lg font-semibold shadow transition"
+                style={{ backgroundColor: '#9b2226', color: '#fff' }}
+                onClick={handleDeleteUser}
+                disabled={deleting}
+                aria-label="Confirm delete user"
+                onMouseOver={e => e.currentTarget.style.backgroundColor = '#7a1a1d'}
+                onMouseOut={e => e.currentTarget.style.backgroundColor = '#9b2226'}
+              >
+                {deleting ? 'Deleting...' : 'Delete'}
+              </button>
+              <button
+                className="px-5 py-2 rounded-lg font-semibold shadow transition"
+                style={{ backgroundColor: colors.medium, color: '#fff' }}
+                onClick={() => setDeleteUserId(null)}
+                disabled={deleting}
+                aria-label="Cancel delete user"
+                onMouseOver={e => e.currentTarget.style.backgroundColor = colors.dark}
+                onMouseOut={e => e.currentTarget.style.backgroundColor = colors.medium}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Club Join Requests Section */}
       <section className="mt-12">
         <h4

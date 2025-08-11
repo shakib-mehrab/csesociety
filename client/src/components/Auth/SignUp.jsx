@@ -68,7 +68,7 @@ const SignUp = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 py-8 px-2">
       <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-xl border border-blue-100">
-        <h2 className="text-3xl font-bold text-center text-blue-700 mb-8">Create Your Account</h2>
+        <h2 className="text-3xl font-bold text-center text-[#002a54] mb-8">Create Your Account</h2>
 
         <div className="flex flex-col items-center mb-6">
           <div className="relative group">
@@ -79,7 +79,7 @@ const SignUp = () => {
                 className="w-28 h-28 rounded-full object-cover border-4 border-blue-300 shadow-lg transition-transform transform group-hover:scale-105"
               />
             ) : (
-              <div className="w-28 h-28 flex items-center justify-center rounded-full bg-gradient-to-tr from-blue-400 to-blue-600 border-4 border-blue-300 shadow-lg relative overflow-hidden">
+              <div className="w-28 h-28 flex items-center justify-center rounded-full bg-gradient-to-tr from-blue-400 to-[#00183a] border-4 border-blue-300 shadow-lg relative overflow-hidden">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -99,7 +99,7 @@ const SignUp = () => {
             )}
             <label
               htmlFor="photo-upload"
-              className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 cursor-pointer shadow-xl flex items-center justify-center transition-transform transform hover:scale-110"
+              className="absolute bottom-0 right-0 bg-[#054e98] hover:bg-[#002a54] text-white rounded-full p-3 cursor-pointer shadow-xl flex items-center justify-center transition-transform transform hover:scale-110"
               title="Upload Profile Picture"
             >
               <input id="photo-upload" type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
@@ -231,7 +231,7 @@ const SignUp = () => {
 
         <button
           type="submit"
-          className="w-full mt-8 bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg"
+          className="w-full mt-8 bg-[#002a54] text-white py-3 rounded-xl font-semibold hover:bg-[#0848a0] transition shadow-lg"
           disabled={loading}
         >
           {loading ? 'Signing Up...' : 'Sign Up'}
