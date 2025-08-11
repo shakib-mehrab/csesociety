@@ -174,6 +174,18 @@ const EventRegistrationReview = () => {
                 <th className="p-4" style={{ borderBottom: "1px solid #034986" }}>
                   Student ID
                 </th>
+                <th className="p-4" style={{ borderBottom: "1px solid #034986" }}>
+                  Payment Amount
+                </th>
+                <th className="p-4" style={{ borderBottom: "1px solid #034986" }}>
+                  Transaction ID
+                </th>
+                <th className="p-4" style={{ borderBottom: "1px solid #034986" }}>
+                  Payment Status
+                </th>
+                <th className="p-4" style={{ borderBottom: "1px solid #034986" }}>
+                  Payment Date
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -214,6 +226,30 @@ const EventRegistrationReview = () => {
                       style={{ borderBottom: "1px solid #409fc8", color: "#002a54" }}
                     >
                       {reg.studentId}
+                    </td>
+                    <td
+                      className="p-4"
+                      style={{ borderBottom: "1px solid #409fc8", color: "#002a54" }}
+                    >
+                      {reg.payment ? reg.payment.amount : <span style={{ color: '#b0b0b0' }}>-</span>}
+                    </td>
+                    <td
+                      className="p-4"
+                      style={{ borderBottom: "1px solid #409fc8", color: "#002a54" }}
+                    >
+                      {reg.payment ? reg.payment.transactionId : <span style={{ color: '#b0b0b0' }}>-</span>}
+                    </td>
+                    <td
+                      className="p-4"
+                      style={{ borderBottom: "1px solid #409fc8", color: "#002a54" }}
+                    >
+                      {reg.payment ? reg.payment.status : <span style={{ color: '#b0b0b0' }}>-</span>}
+                    </td>
+                    <td
+                      className="p-4"
+                      style={{ borderBottom: "1px solid #409fc8", color: "#002a54" }}
+                    >
+                      {reg.payment && reg.payment.paymentDate ? new Date(reg.payment.paymentDate).toLocaleString() : <span style={{ color: '#b0b0b0' }}>-</span>}
                     </td>
                   </tr>
                 ))

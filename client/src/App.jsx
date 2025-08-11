@@ -7,6 +7,7 @@ import ClubsPage from './pages/ClubsPage';
 import ClubDetailsPage from './pages/ClubDetailsPage';
 import EventsPage from './pages/EventsPage';
 import EventDetails from './components/Events/EventDetails';
+import EventPaymentInfo from './components/Events/EventPaymentInfo';
 import NoticesPage from './pages/NoticesPage';
 import NoticeDetails from './components/Notices/NoticeDetails';
 import ScholarshipPage from './pages/ScholarshipPage';
@@ -14,6 +15,7 @@ import DashboardPage from './pages/DashboardPage';
 import UserProfilePage from './pages/UserProfilePage';
 import PaymentPage from './pages/PaymentPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
+import EventPaymentSuccessPage from './pages/EventPaymentSuccessPage';
 import PaymentSummaryPage from './pages/PaymentSummaryPage';
 import SignIn from './components/Auth/SignIn';
 import SignUp from './components/Auth/SignUp';
@@ -36,6 +38,7 @@ function App() {
           <Route path="/clubs/:id" element={<ClubDetailsPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/:id" element={<EventDetails />} />
+          <Route path="/events/:id/payment" element={<ProtectedRoute><EventPaymentInfo /></ProtectedRoute>} />
           <Route path="/notices" element={<NoticesPage />} />
           <Route path="/notices/:id" element={<NoticeDetails />} />
           <Route path="/scholarships" element={<ScholarshipPage />} />
@@ -45,6 +48,7 @@ function App() {
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/payment-summary" element={<PaymentSummaryPage />} />
           <Route path="/payment/success" element={<PaymentSuccessPage />} />
+          <Route path="/event/payment/success" element={<EventPaymentSuccessPage />} />
           <Route path="/payments" element={<ProtectedRoute roles={['super_admin']}><PaymentPage /></ProtectedRoute>} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

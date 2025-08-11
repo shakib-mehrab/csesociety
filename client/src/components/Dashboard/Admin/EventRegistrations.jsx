@@ -131,6 +131,30 @@ const EventRegistrations = () => {
                   >
                     Student ID
                   </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                  >
+                    Payment Amount
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                  >
+                    Transaction ID
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                  >
+                    Payment Status
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider"
+                  >
+                    Payment Date
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white/80 divide-y divide-[#6aa9d0]/30">
@@ -159,6 +183,18 @@ const EventRegistrations = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-[#01457e]">
                         {r.studentId}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-[#01457e]">
+                        {r.payment ? r.payment.amount : <span className="text-gray-400">-</span>}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-[#01457e]">
+                        {r.payment ? r.payment.transactionId : <span className="text-gray-400">-</span>}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-[#01457e]">
+                        {r.payment ? r.payment.status : <span className="text-gray-400">-</span>}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-[#01457e]">
+                        {r.payment && r.payment.paymentDate ? new Date(r.payment.paymentDate).toLocaleString() : <span className="text-gray-400">-</span>}
                       </td>
                     </tr>
                   ))}

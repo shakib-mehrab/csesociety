@@ -143,20 +143,37 @@ const registerForEvent = asyncHandler(async (req, res) => {
 // @route   GET /api/events/:id/registrations
 // @access  Private/Super_Admin_Admin
 const getEventRegistrations = asyncHandler(async (req, res) => {
-    const event = await Event.findById(req.params.id).populate('registeredUsers', 'name email studentId');
-    if (event) {
-        if (req.user.role === 'admin' || req.user.role === 'coordinator') {
-            const club = await Club.findById(event.clubId);
-            if (!club || club.coordinator.toString() !== req.user._id.toString()) {
-                res.status(403);
-                throw new Error('Not authorized to view registrations for this event');
-            }
-        }
-        res.json(event.registeredUsers);
-    } else {
-        res.status(404);
-        throw new Error('Event not found');
+  const event = await Event.findById(req.params.id).populate('registeredUsers', 'name email studentId');
+  if (!event) {
+    res.status(404);
+    throw new Error('Event not found');
+  }
+  if (req.user.role === 'admin' || req.user.role === 'coordinator') {
+    const club = await Club.findById(event.clubId);
+    if (!club || club.coordinator.toString() !== req.user._id.toString()) {
+      res.status(403);
+      throw new Error('Not authorized to view registrations for this event');
     }
+  }
+
+  // For each registered user, fetch their payment for this event
+  const Payment = require('../models/Payment');
+  const registrations = await Promise.all(event.registeredUsers.map(async (user) => {
+    const payment = await Payment.findOne({ eventId: event._id, userId: user._id, status: 'paid' });
+    return {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      studentId: user.studentId,
+      payment: payment ? {
+        amount: payment.amount,
+        transactionId: payment.transactionId,
+        status: payment.status,
+        paymentDate: payment.paymentDate,
+      } : null
+    };
+  }));
+  res.json(registrations);
 });
 
 module.exports = {
