@@ -64,6 +64,10 @@ const ClubDetailsPage = () => {
       toast.error('Please sign in to join a club');
       return;
     }
+    if (user.role === 'coordinator') {
+      toast.error('Coordinators cannot join or send join requests to clubs.');
+      return;
+    }
     // Check if user is already a member of this club
     if (user.clubsJoined && user.clubsJoined.some(
       c => (typeof c === 'string' ? c === club._id : c._id === club._id)
@@ -118,7 +122,11 @@ const ClubDetailsPage = () => {
             </div>
             {/* Join Button */}
             <div className="mt-4">
-              {hasJoined ? (
+              {user && user.role === 'coordinator' ? (
+                <button className="px-6 py-2 rounded-lg bg-gray-300 text-gray-500 font-semibold cursor-not-allowed" disabled>
+                  Coordinators cannot join clubs
+                </button>
+              ) : hasJoined ? (
                 <button className="px-6 py-2 rounded-lg bg-green-100 text-green-700 font-semibold cursor-not-allowed" disabled>
                   Joined
                 </button>

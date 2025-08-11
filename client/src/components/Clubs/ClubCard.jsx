@@ -16,7 +16,10 @@ const ClubCard = ({ club }) => {
       toast.error('Please sign in to join a club');
       return;
     }
-
+    if (user.role === 'coordinator') {
+      toast.error('Coordinators cannot join or send join requests to clubs.');
+      return;
+    }
     // Check if user is already a member of this club
     if (
       user.clubsJoined &&
@@ -28,7 +31,6 @@ const ClubCard = ({ club }) => {
       setJoined(true);
       return;
     }
-
     // Navigate to payment summary page with clubId and clubName
     navigate(
       `/payment-summary?clubId=${club._id}&clubName=${encodeURIComponent(club.name)}`
@@ -92,13 +94,22 @@ const ClubCard = ({ club }) => {
           >
             View Details
           </Link>
-          <button
-            className="flex-1 px-4 py-2 bg-[#ff8000] text-white rounded-md hover:bg-[#cc6600] transition-colors text-center disabled:opacity-60"
-            onClick={handleJoin}
-            disabled={joining || joined}
-          >
-            {joined ? 'Requested' : joining ? 'Joining...' : 'Join'}
-          </button>
+          {user && user.role === 'coordinator' ? (
+            <button
+              className="flex-1 px-4 py-2 bg-gray-300 text-gray-500 rounded-md text-center cursor-not-allowed"
+              disabled
+            >
+              Coordinators cannot join clubs
+            </button>
+          ) : (
+            <button
+              className="flex-1 px-4 py-2 bg-[#ff8000] text-white rounded-md hover:bg-[#cc6600] transition-colors text-center disabled:opacity-60"
+              onClick={handleJoin}
+              disabled={joining || joined}
+            >
+              {joined ? 'Requested' : joining ? 'Joining...' : 'Join'}
+            </button>
+          )}
         </div>
       </div>
     </div>
