@@ -1,0 +1,214 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{CoU CSE Society: A Web-Based Club Management System}}\\[1.5em]
+    {\large Department of Computer Science and Engineering, Comilla University}
+\end{center}
+
+\section*{1.5 Summary of Contributions}
+This project presents the design and implementation of the ``CoU CSE Society'' web system, developed to streamline and digitize the management of all student club activities under the Department of Computer Science and Engineering, Comilla University. The system introduces a robust, role-based platform that empowers Super Admins, Club Coordinators (Admins), and Members to efficiently manage clubs, events, memberships, and payments. Leveraging the MERN stack (MongoDB, Express.js, React.js, Node.js), TailwindCSS for modern UI, and Cloudinary for media management, the system delivers a secure, scalable, and user-friendly solution tailored to the needs of a dynamic academic environment.
+
+\section*{2 Literature Review}
+\subsection*{2.1 Feasibility Study}
+\subsubsection*{2.1.1 Technical Feasibility}
+The system is built using the MERN stack, a proven technology suite for scalable web applications. MongoDB provides a flexible NoSQL database, Express.js and Node.js offer a robust backend API, and React.js ensures a responsive frontend. TailwindCSS is used for rapid UI development, while Cloudinary manages image uploads efficiently. All chosen technologies are open-source, well-documented, and widely adopted, ensuring technical feasibility and maintainability.
+
+\subsubsection*{2.1.2 Economic Feasibility}
+The project utilizes free and open-source technologies, minimizing development and deployment costs. Cloudinary’s free tier suffices for academic-scale media storage. The system can be hosted on affordable cloud platforms, making it economically viable for university use without incurring significant expenses.
+
+\subsubsection*{2.1.3 Behavioral Feasibility}
+The system is designed with a user-centric approach, ensuring ease of use for students, coordinators, and administrators. Role-based dashboards, intuitive navigation, and clear feedback mechanisms promote user acceptance. The modern UI and mobile responsiveness further enhance user engagement and satisfaction.
+
+\subsection*{2.2 Context of Departmental Websites}
+Departmental club management is often handled manually or through fragmented digital tools, leading to inefficiencies and lack of transparency. Existing departmental websites typically provide static information, lacking interactive features for club management, event registration, or payment processing. The ``CoU CSE Society'' system addresses these gaps by offering a unified, interactive platform tailored to the specific needs of the CSE department.
+
+\subsection*{2.3 Comparative Analysis}
+\subsubsection*{2.3.1 Comparative Analysis of Existing Club Management Systems}
+Existing solutions such as CampusGroups, ClubExpress, and Wild Apricot offer comprehensive club management features but are often commercial, generic, and not tailored to the unique requirements of Bangladeshi universities. They may lack integration with local payment gateways and do not provide department-specific customization.
+
+\subsubsection*{2.3.2 Feature-Based Comparison}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+Feature & CoU CSE Society & CampusGroups & ClubExpress & Wild Apricot \\
+\hline
+Role-Based Access & Yes & Yes & Yes & Yes \\
+Local Payment Integration & Yes & No & No & No \\
+Department Customization & Yes & No & No & No \\
+Modern UI (TailwindCSS) & Yes & No & No & No \\
+Open Source & Yes & No & No & No \\
+Cloud Media Management & Yes & Yes & Yes & Yes \\
+\hline
+\end{tabular}
+
+\subsection*{2.4 Analysis Insights}
+The review highlights a clear need for a customizable, cost-effective, and locally relevant club management system. ``CoU CSE Society'' fills this gap by providing a tailored solution with local payment integration, modern UI, and features specifically designed for the academic context of Comilla University.
+
+\section*{3 System Analysis \& Design}
+\subsection*{3.1 Requirement Analysis}
+\subsubsection*{3.1.1 Functional Requirements}
+\begin{itemize}[leftmargin=2em]
+    \item User Authentication: Secure login and registration with role-based access (Super Admin, Admin, Member).
+    \item Club Management: Create, edit, and delete clubs; assign coordinators and sub-coordinators.
+    \item Event Management: Create, manage, and register for events; view event details.
+    \item Member Management: Approve or reject membership requests; view member lists.
+    \item Payment Integration: Online payment for club joining and event registration.
+    \item Dashboard Views: Role-specific dashboards for Super Admin, Admin, and Members.
+    \item Notifications: Alerts for registration, payment, and approvals.
+    \item Media Management: Upload and display club logos, event posters, and user profile pictures.
+\end{itemize}
+
+\subsubsection*{3.1.2 Non-Functional Requirements}
+\begin{itemize}[leftmargin=2em]
+    \item Security: JWT-based authentication, input validation, and secure password storage.
+    \item Performance: Fast response times and efficient data handling.
+    \item Scalability: Modular architecture to support future expansion.
+    \item Usability: Intuitive, responsive UI with clear navigation.
+    \item Reliability: Robust error handling and data consistency.
+    \item Maintainability: Clean codebase with clear documentation.
+\end{itemize}
+
+\subsubsection*{3.1.3 Hardware and Software Requirements}
+\begin{itemize}[leftmargin=2em]
+    \item Hardware: Standard PC or laptop with internet access.
+    \item Software: Node.js, MongoDB, modern web browser.
+    \item Dependencies: React.js, Express.js, TailwindCSS, Cloudinary, SSLCommerz (or similar for payment).
+\end{itemize}
+
+\subsection*{3.2 Use Case Diagram}
+The system’s use case diagram includes the following actors and interactions:
+\begin{itemize}[leftmargin=2em]
+    \item Super Admin: Manages all clubs, events, users, and payments.
+    \item Admin (Coordinator): Manages their club’s events, members, and notices.
+    \item Member: Joins clubs, registers for events, makes payments.
+\end{itemize}
+\textbf{Description:} Super Admin can create clubs, assign coordinators, and oversee all activities. Admins manage their respective clubs and events. Members can join clubs, register for events, and view their participation history.
+
+\textit{(Diagram Description: The diagram shows three actors—Super Admin, Admin, Member—interacting with use cases such as Manage Clubs, Manage Events, Register for Event, Make Payment, and View Dashboard. Relationships are shown via association lines.)}
+
+\subsection*{3.3 Sequence Diagram}
+A typical sequence for event registration and payment:
+\begin{enumerate}[leftmargin=2em]
+    \item Member selects an event and clicks ``Register''.
+    \item System checks if the member is already registered.
+    \item If not, the system initiates the payment process.
+    \item Member completes payment via SSLCommerz.
+    \item System verifies payment and updates registration status.
+    \item Member receives confirmation.
+\end{enumerate}
+\textit{(Diagram Description: The sequence diagram illustrates the interaction between Member, System, and Payment Gateway, showing the flow from event selection to payment confirmation.)}
+
+\section*{4 Design}
+\subsection*{4.1 Class Diagram}
+The main classes/entities:
+\begin{itemize}[leftmargin=2em]
+    \item User: Attributes include name, email, password, role, clubsJoined, etc.
+    \item Club: Attributes include name, description, logo, coordinator, subCoordinators, members.
+    \item Event: Attributes include title, description, date, venue, fee, clubId, registeredUsers.
+    \item Payment: Attributes include userId, eventId/clubId, amount, status, paymentDate, transactionId.
+    \item Notice: Attributes include title, content, clubId, createdBy, date.
+\end{itemize}
+\textit{(Diagram Description: The class diagram shows relationships such as User–Club (many-to-many via clubsJoined), Club–Event (one-to-many), Event–Payment (one-to-many), and Club–Notice (one-to-many).)}
+
+\subsection*{4.2 Data Flow Diagrams (DFD)}
+\subsubsection*{4.2.1 Level 0 DFD}
+\textbf{External Entities:} User, Payment Gateway\\
+\textbf{Processes:} Authentication, Club Management, Event Management, Payment Processing\\
+\textbf{Data Stores:} User DB, Club DB, Event DB, Payment DB
+
+\textit{(Diagram Description: The Level 0 DFD shows users interacting with the system for authentication, club/event management, and payments, with data flowing to/from the respective databases and payment gateway.)}
+
+\subsubsection*{4.2.2 Level 1 DFD}
+\textbf{Authentication Process:} Handles login, registration, and role assignment.\\
+\textbf{Club Management Process:} Handles club creation, member management, and coordinator assignment.\\
+\textbf{Event Management Process:} Handles event creation, registration, and participant tracking.\\
+\textbf{Payment Processing:} Handles payment initiation, verification, and record-keeping.
+
+\textit{(Diagram Description: The Level 1 DFD expands each process, showing detailed data flows between user actions, system processes, and data stores.)}
+
+\subsection*{4.3 Database Schema Diagram}
+The database schema for the CoU CSE Society system is designed to efficiently represent the relationships and data requirements of club management, event organization, and user participation. The main collections and their key fields are as follows:
+
+	extbf{User Collection:}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{_id}: Unique identifier for each user.
+    \item \textbf{name}: Full name of the user.
+    \item \textbf{email}: Email address (unique).
+    \item \textbf{password}: Hashed password for authentication.
+    \item \textbf{studentId}: Unique student ID.
+    \item \textbf{department}, \textbf{batch}, \textbf{phone}: Academic and contact details.
+    \item \textbf{role}: User role (member, admin, super\_admin, coordinator, sub\_coordinator).
+    \item \textbf{profilePicture}: URL to profile image (Cloudinary).
+    \item \textbf{clubsJoined}: Array of references to Club documents (many-to-many relationship).
+\end{itemize}
+
+	extbf{Club Collection:}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{_id}: Unique identifier for each club.
+    \item \textbf{name}: Club name (unique).
+    \item \textbf{description}: Club description.
+    \item \textbf{logo}: URL to club logo (Cloudinary).
+    \item \textbf{coordinator}: Reference to User (admin/coordinator).
+    \item \textbf{subCoordinators}: Array of User references.
+    \item \textbf{members}: Array of User references (club members).
+    \item \textbf{contactEmail}: Club contact email.
+\end{itemize}
+
+	extbf{Event Collection:}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{_id}: Unique identifier for each event.
+    \item \textbf{title}, \textbf{description}: Event details.
+    \item \textbf{date}, \textbf{time}, \textbf{venue}: Scheduling information.
+    \item \textbf{type}: Event type (club or society).
+    \item \textbf{clubId}: Reference to Club (if applicable).
+    \item \textbf{organizer}: Reference to User (event creator).
+    \item \textbf{registrationDeadline}, \textbf{fee}, \textbf{poster}: Additional event info.
+    \item \textbf{registeredUsers}: Array of User references (event participants).
+\end{itemize}
+
+	extbf{Payment Collection:}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{_id}: Unique identifier for each payment.
+    \item \textbf{userId}: Reference to User who made the payment.
+    \item \textbf{eventId}/\textbf{clubId}: Reference to Event or Club (context of payment).
+    \item \textbf{amount}: Payment amount.
+    \item \textbf{status}: Payment status (pending, paid, refunded).
+    \item \textbf{paymentDate}: Date and time of payment.
+    \item \textbf{transactionId}: Unique transaction identifier.
+    \item \textbf{recordedBy}: Reference to User who recorded the payment (for admin actions).
+    \item \textbf{notes}: Optional notes about the payment.
+\end{itemize}
+
+	extbf{Notice Collection:}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{_id}: Unique identifier for each notice.
+    \item \textbf{title}, \textbf{content}: Notice details.
+    \item \textbf{clubId}: Reference to Club (if applicable).
+    \item \textbf{createdBy}: Reference to User who created the notice.
+    \item \textbf{date}: Date of creation.
+\end{itemize}
+
+	extbf{Relationships:}
+\begin{itemize}[leftmargin=2em]
+    \item Users can join multiple clubs (many-to-many via \texttt{clubsJoined}).
+    \item Clubs can have multiple members, coordinators, and sub-coordinators.
+    \item Events are linked to clubs and have multiple registered users.
+    \item Payments are linked to users and either events or clubs.
+    \item Notices are linked to clubs and their creators.
+\end{itemize}
+
+This schema ensures data integrity, efficient querying, and clear representation of all relationships required for comprehensive club and event management.
+
+\textit{(Diagram Description: The schema diagram illustrates collections/tables and their relationships, such as references between users and clubs, events and payments, etc.)}
+
+\end{document}
