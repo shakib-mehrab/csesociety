@@ -13,6 +13,14 @@ const protect = asyncHandler(async (req, res, next) => {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.id).select('-password');
+      // If user is coordinator, find their club and set req.user.club
+      if (req.user.role === 'coordinator') {
+        const Club = require('../models/Club');
+        const club = await Club.findOne({ coordinator: req.user._id });
+        if (club) {
+          req.user.club = club._id;
+        }
+      }
       next();
     } catch (error) {
       console.error(error);
