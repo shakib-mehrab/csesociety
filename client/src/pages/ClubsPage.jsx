@@ -24,7 +24,7 @@ const ClubsPage = () => {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="max-w-7xl mx-auto px-6 py-12 bg-[#eaf2fa]  ">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-[#01457e]">Our Clubs</h1>
         <p className="text-gray-600 mt-3 text-lg">Explore the vibrant clubs under the CSE Society</p>
