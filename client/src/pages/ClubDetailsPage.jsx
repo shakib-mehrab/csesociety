@@ -64,6 +64,14 @@ const ClubDetailsPage = () => {
       toast.error('Please sign in to join a club');
       return;
     }
+    // Check if user is already a member of this club
+    if (user.clubsJoined && user.clubsJoined.some(
+      c => (typeof c === 'string' ? c === club._id : c._id === club._id)
+    )) {
+      toast.success('Already Joined');
+      setHasJoined(true);
+      return;
+    }
     // Navigate to payment summary page with clubId and clubName
     navigate(`/payment-summary?clubId=${club._id}&clubName=${encodeURIComponent(club.name)}`);
   };

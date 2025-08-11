@@ -16,6 +16,14 @@ const ClubCard = ({ club }) => {
       toast.error('Please sign in to join a club');
       return;
     }
+    // Check if user is already a member of this club
+    if (user.clubsJoined && user.clubsJoined.some(
+      c => (typeof c === 'string' ? c === club._id : c._id === club._id)
+    )) {
+      toast.success('Already Joined');
+      setJoined(true);
+      return;
+    }
     // Navigate to payment summary page with clubId and clubName
     navigate(`/payment-summary?clubId=${club._id}&clubName=${encodeURIComponent(club.name)}`);
   };
@@ -65,7 +73,7 @@ const ClubCard = ({ club }) => {
             onClick={handleJoin}
             disabled={joining || joined}
           >
-            {joined ? 'Requested' : joining ? 'Joining...' : 'Join'}
+            {joined ? 'Join' : joining ? 'Joining...' : 'Join'}
           </button>
         </div>
       </div>

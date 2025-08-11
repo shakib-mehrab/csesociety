@@ -34,7 +34,9 @@ const EventDetails = () => {
       event &&
       user &&
       event.registeredUsers &&
-      event.registeredUsers.includes(user._id)
+      event.registeredUsers.some(
+        u => (typeof u === 'string' ? u === user._id : u._id === user._id)
+      )
     ) {
       toast.error('Already registered for the event');
       return;
