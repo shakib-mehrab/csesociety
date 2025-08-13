@@ -136,7 +136,7 @@ const TaskSection = () => {
       {/* Task Details Modal */}
       {viewTask && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4"
+         className="fixed inset-0 z-50 flex items-center justify-center bg-[#b8d3ff]/50 backdrop-blur-md transition-all duration-300 ease-out transform scale-100 opacity-100"
           aria-modal="true"
           role="dialog"
           tabIndex="-1"
