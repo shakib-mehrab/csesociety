@@ -57,7 +57,7 @@ const ClubAnnouncements = () => {
   return (
     <div className="bg-gradient-to-br from-[#eaf2fa] via-[#6aa9d0]/20 to-[#002147]/10 shadow-md rounded-2xl p-6 border border-[#01457e]/20">
       <h4 className="font-extrabold text-2xl mb-4 text-[#002147] tracking-wide">
-        Club Announcements
+        All Announcements
       </h4>
 
       <div className="overflow-x-auto">
